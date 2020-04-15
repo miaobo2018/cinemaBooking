@@ -11,7 +11,8 @@ router.get("/", function(req, res) {
 
 // sign up
 router.get("/signup", function(req, res) {
-  res.send("signup");
+  // res.send("signup");
+  res.render("signup");
 });
 router.post("/signup", signupController.post_newuser);
 
