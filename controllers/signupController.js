@@ -19,13 +19,10 @@ module.exports.post_newuser = function(req, res) {
 
   mysqldb.connect(function(err) {
     if (err) throw err;
-    console.log("Connected to MySQL DB");
-    console.log(email);
+    // do not detect if email already exists
 
     var table = "testuser"; // table name
     var sql = `INSERT INTO ${table} (email, password, id, type, name, cellphone, favouriteType) VALUES ('${email}', '${password}', ${id}, '${type}', '${name}', '${cellphone}', '${favouriteType}')`;
-
-    console.log(sql);
 
     mysqldb.query(sql, function(err, result) {
       if (err) throw err;
