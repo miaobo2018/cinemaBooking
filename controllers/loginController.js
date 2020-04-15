@@ -8,6 +8,7 @@ var mysqldb = mysql.createConnection({
 
 module.exports.post_userlogin = function(req, res) {
   // login function
+  // need to judge whether it is admin or user
   var email = req.body.email;
   var password = req.body.password;
 
