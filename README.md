@@ -24,3 +24,4 @@ CREATE TABLE testfilm (
     length integer,
     primary key (filmId)
 );
+Test~
