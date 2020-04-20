@@ -1,4 +1,7 @@
 # cinemaBooking
+2020-04-20 use init.sql to initialize the database
+
+
 2020-04-14 Bo 测试无误
 注意需新建两个sql表格 如下，同时注意更改为本地用户与密码
 主要实现功能: signup login admin->addfilm user->searchfilm

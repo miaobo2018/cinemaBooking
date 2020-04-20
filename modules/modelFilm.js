@@ -4,22 +4,22 @@ var pool = mysql.createPool({
   host: "localhost",
   user: "root",
   password: "Mb2047809!!",
-  database: "testmysqldb" // schema name
+  database: "testmysqldb", // schema name
 });
 
-module.exports.post_addfilm = function(req, res) {
-  var filmId = req.body.filmId;
+module.exports.post_addfilm = function (req, res) {
+  // var filmId = req.body.filmId;
   var filmName = req.body.filmName;
   var type = req.body.type;
   var length = req.body.length;
   console.log("add film ...");
-  pool.getConnection(function(err, mysqldb) {
+  pool.getConnection(function (err, mysqldb) {
     if (err) throw err;
 
     var table = "testfilm"; // table name
-    var sql = `INSERT INTO ${table} (filmId, filmName, type, length) VALUES (${filmId}, '${filmName}', '${type}', ${length})`;
-
-    mysqldb.query(sql, function(err, result) {
+    // var sql = `INSERT INTO ${table} (filmId, filmName, type, length) VALUES (${filmId}, '${filmName}', '${type}', ${length})`;
+    var sql = `INSERT INTO ${table} (filmName, type, length) VALUES ('${filmName}', '${type}', ${length})`;
+    mysqldb.query(sql, function (err, result) {
       if (err) throw err;
       console.log("New Film Inserted");
 
@@ -32,17 +32,17 @@ module.exports.post_addfilm = function(req, res) {
 };
 
 // search film info by name
-module.exports.post_searchfilm = function(req, res) {
+module.exports.post_searchfilm = function (req, res) {
   // search film info by name
   var filmName = req.body.filmName;
 
-  pool.getConnection(function(err, mysqldb) {
+  pool.getConnection(function (err, mysqldb) {
     if (err) throw err;
 
     var table = "testfilm";
     var sql = `SELECT filmId, filmName, type, length FROM ${table}`;
 
-    mysqldb.query(sql, function(err, result, fields) {
+    mysqldb.query(sql, function (err, result, fields) {
       if (err) throw err;
       var find = 0;
       var i;
