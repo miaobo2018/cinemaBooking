@@ -31,13 +31,13 @@ module.exports.post_userlogin = function(req, res) {
         if (email === result[i].email && password != result[i].password) {
           // Password Wrong -> redirect
           console.log("Password Wrong");
-          return res.redirect("home");
+          return res.redirect("index");
         }
       }
 
       // No User/Email
       console.log("Email Wrong");
-      return res.redirect("home");
+      return res.redirect("index");
     });
   });
 };

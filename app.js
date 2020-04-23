@@ -14,6 +14,12 @@ var mysqldb = mysql.createConnection({
   password: "Mb2047809!!",
   database: "testmysqldb"
 });
+const users = require('./controllers/userController.js');
+const movies = require('./controllers/movieController.js');
+const reservations = require('./controllers/reservationController.js');
+const newses = require('./controllers/newsController.js');
+const signupController = require("./controllers/signupController");
+const loginController = require("./controllers/loginController");
 
 app.set("view engine", "ejs"); // ejs engine
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -27,9 +33,7 @@ app.use(function(req, res, next) {
   next();
 });
 
-app.get("/", function(req, res) {
-  res.render("home");
-});
+
 
 app.use("/api", router);
 app.use(express.static(__dirname + "/public"));
@@ -40,6 +44,85 @@ app.use(function(req, res, next) {
   next();
 });
 // sql <--> service ?
+
+app.get("/", function(req, res) {
+  res.render('index', {
+    title: 'Reservation',
+    user: req.user == undefined ? 'none' : req.user,
+    action: 'none',
+    msg: 'none'
+  });
+});
+
+
+/**   the below is the code added by Xiaoming   **/
+
+app.get("/signup", function (req, res) {
+
+  res.render('index', {
+    title: 'Signup',
+    user: req.user == undefined ? 'none' : req.user,
+    action: 'signup',
+    msg: 'none'
+  });
+
+});
+app.post("/signup", signupController.post_newuser);
+
+
+app.get("/login", function (req, res) {
+  res.render('index', {
+    title: 'Login',
+    user: req.user == undefined ? 'none' : req.user,
+    action: 'login',
+    msg: 'none'
+  });
+});
+app.post("/login", loginController.post_userlogin);
+
+function isLoggedAdminIn(req, res, next) {
+  if ( req.user.username == "admin"){
+    return next();
+
+  }
+  res.redirect('/');
+}
+/* User */
+app.get('/showuser',  users.showuser());
+app.get('/deleteuser', isLoggedAdminIn, users.deleteuser());
+app.get('/edituser',  users.edituser());
+app.post('/deleteuserCRUD', isLoggedAdminIn, users.deleteuserCRUD());
+app.post('/edituserCRUD', users.edituserCRUD());
+
+/* Movie */
+app.get('/showmovie',  movies.showmovieCRUD());
+app.get('/addmovie', movies.addmovie());
+app.get('/deletemovie', isLoggedAdminIn, movies.deletemovie());
+app.get('/editmovie', movies.editmovie());
+app.post('/addmovieCRUD', isLoggedAdminIn, movies.addmovieCRUD());
+app.post('/deletemovieCRUD', isLoggedAdminIn, movies.deletemovieCRUD());
+app.post('/editmovieCRUD', isLoggedAdminIn, movies.editmovieCRUD());
+
+/* AJAX - bases data */
+app.post('/getmovies', movies.getmovies);
+app.post('/getdays', movies.getdays);
+app.post('/gethours', movies.gethours);
+app.post("/getPrice", movies.getPrice);
+
+/* Reservation */
+app.post('/getreservation', reservations.getreservation);
+app.post('/getinformationaboutseat', reservations.getinformationaboutseat);
+app.post('/makeReservation', reservations.makeReservation);
+
+
+/* Ads */
+app.post('/shownews', newses.shownewsCRUD());
+app.get('/addnews', isLoggedAdminIn, newses.addnews());
+app.get('/deletenews', isLoggedAdminIn, newses.deletenews());
+app.get('/editnews', isLoggedAdminIn, newses.editnews());
+app.post('/addnewsCRUD', isLoggedAdminIn, newses.addnewsCRUD());
+app.post('/deletenewsCRUD', isLoggedAdminIn, newses.deletenewsCRUD());
+app.post('/editnewsCRUD', isLoggedAdminIn, newses.editnewsCRUD());
 
 const port = 3000;
 app.listen(port, function(req, res) {

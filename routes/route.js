@@ -3,25 +3,37 @@ const router = express.Router();
 
 const signupController = require("../controllers/signupController");
 const loginController = require("../controllers/loginController");
+const users = require('../controllers/userController.js');
+const movies = require('../controllers/movieController.js');
+const reservations = require('../controllers/reservationController.js');
+const newses = require('../controllers/newsController.js');
 
 const modelFilm = require("../modules/modelFilm");
 const modelSeat = require("../modules/modelSeat");
 
-router.get("/", function (req, res) {
-  console.log("test");
-  res.send("Router Page");
-});
 
+/** 下方代码已包含 建议删除
 // sign up
 router.get("/signup", function (req, res) {
-  // res.send("signup");
-  res.render("signup");
+
+    res.render('index', {
+      title: 'Signup',
+      user: req.user == undefined ? 'none' : req.user,
+      action: 'signup',
+      msg: 'none'
+    });
+
 });
 router.post("/signup", signupController.post_newuser);
 
 // login in
 router.get("/login", function (req, res) {
-  res.send("login");
+  res.render('index', {
+    title: 'Login',
+    user: req.user == undefined ? 'none' : req.user,
+    action: 'login',
+    msg: 'none'
+  });
 });
 router.post("/login", loginController.post_userlogin);
 
@@ -52,10 +64,14 @@ router.post("/addfilm", modelFilm.post_addfilm);
 router.get("/ad", function (req, res) {
   res.send("ad");
 });
+ **/
 
 // rate/comment
 router.get("/rate", function (req, res) {
   res.send("rate");
 });
+
+
+
 
 module.exports = router;

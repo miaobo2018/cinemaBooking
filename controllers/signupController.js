@@ -12,7 +12,7 @@ module.exports.post_newuser = function (req, res) {
   var email = req.body.email;
   var password = req.body.password;
   // var id = 1; // test -> should be unique increment automatically
-  var type = req.body.type;
+  var type = req.body.type;//前端不可能让用户自己设置type啊。。。前端界面没有type的input,建议删除或者自建一个
   var name = req.body.name;
   var cellphone = req.body.cellphone;
   var favouriteType = req.body.favouriteType;
@@ -30,7 +30,7 @@ module.exports.post_newuser = function (req, res) {
     });
   });
 
-  // render to dashboard page
-  // pool.releaseConnection(mysqldb);
-  res.send("Return to dashboard page");
+
+
+  res.render("index");
 };
