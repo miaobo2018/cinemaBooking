@@ -30,5 +30,12 @@ module.exports.post_newuser = function (req, res) {
     });
   });
 
-  res.render("index");
+
+
+  res.render("index",{
+    title: 'Reservation',
+    user: req.user == undefined ? 'none' : req.user,
+    action: 'none',
+    msg: 'none'
+  });
 };
