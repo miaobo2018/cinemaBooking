@@ -3,23 +3,23 @@ var mysqldb = mysql.createConnection({
   host: "localhost",
   user: "root",
   password: "Mb2047809!!",
-  database: "testmysqldb" // schema name
+  database: "testmysqldb", // schema name
 });
 
-module.exports.post_userlogin = function(req, res) {
+module.exports.post_userlogin = function (req, res) {
   // login function
   // need to judge whether it is admin or user
-  var email = req.body.email;
+  var email = req.body.username; // in frontend it called username
   var password = req.body.password;
 
-  mysqldb.connect(function(err) {
+  mysqldb.connect(function (err) {
     if (err) throw err;
     console.log("Connect to MySQL DB");
 
     var table = "testuser"; // table name
     var sql = `SELECT email, password FROM ${table}`;
 
-    mysqldb.query(sql, function(err, result, fields) {
+    mysqldb.query(sql, function (err, result, fields) {
       if (err) throw err;
       var i;
       for (i = 0; i < result.length; i++) {
