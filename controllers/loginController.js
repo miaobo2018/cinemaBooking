@@ -37,7 +37,12 @@ module.exports.post_userlogin = function(req, res) {
 
       // No User/Email
       console.log("Email Wrong");
-      return res.redirect("index");
+      return res.redirect("index",{
+        title: 'Reservation',
+        user: req.user == undefined ? 'none' : req.user,
+        action: 'none',
+        msg: 'none'
+      });
     });
   });
 };
