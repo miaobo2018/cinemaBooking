@@ -4,7 +4,7 @@ var mysqldb = mysql.createConnection({
   host: "localhost",
   user: "root",
   password: "Mb2047809!!",
-  database: "testmysqldb", // schema name
+  database: "cinema_booking", // schema name
 });
 
 exports.addmovie = function () {
@@ -74,6 +74,7 @@ exports.addmovieCRUD = function () {
      * 需要后端保存新的电影 hall就是room 注意这里的days可能是单个日期 也可能是一个日期数组 hours同理 写入后端的时候要分情况
      * 考虑
      */
+    // [1]no 1yes; [1,2]
 
     res.location("showmovie");
     res.redirect("showmovie");
@@ -117,6 +118,7 @@ exports.getmovies = function (req, res) {
   /**
    * 返回所有电影名称，数组形式 ["Harry Potter","Price White",...]
    */
+  // return [] res.send(...) ??? 待定
 };
 
 exports.getdays = function (req, res) {

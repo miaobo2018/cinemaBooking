@@ -3,7 +3,7 @@ var mysqldb = mysql.createConnection({
   host: "localhost",
   user: "root",
   password: "Mb2047809!!",
-  database: "testmysqldb", // schema name
+  database: "cinema_booking", // schema name
 });
 
 module.exports.post_userlogin = function (req, res) {
@@ -16,7 +16,7 @@ module.exports.post_userlogin = function (req, res) {
     if (err) throw err;
     console.log("Connect to MySQL DB");
 
-    var table = "testuser"; // table name
+    var table = "user"; // table name
     var sql = `SELECT email, password FROM ${table}`;
 
     mysqldb.query(sql, function (err, result, fields) {
@@ -37,11 +37,11 @@ module.exports.post_userlogin = function (req, res) {
 
       // No User/Email
       console.log("Email Wrong");
-      return res.redirect("index",{
-        title: 'Reservation',
-        user: req.user == undefined ? 'none' : req.user,
-        action: 'none',
-        msg: 'none'
+      return res.redirect("index", {
+        title: "Reservation",
+        user: req.user == undefined ? "none" : req.user,
+        action: "none",
+        msg: "none",
       });
     });
   });

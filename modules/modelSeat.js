@@ -3,7 +3,7 @@ var pool = mysql.createPool({
   host: "localhost",
   user: "root",
   password: "Mb2047809!!",
-  database: "testmysqldb", // schema name
+  database: "cinema_booking", // schema name
 });
 
 module.exports.post_bookseat = function (req, res) {

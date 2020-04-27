@@ -3,7 +3,7 @@ var pool = mysql.createPool({
   host: "localhost",
   user: "root",
   password: "Mb2047809!!",
-  database: "testmysqldb", // schema name
+  database: "cinema_booking", // schema name
 });
 
 module.exports.post_newuser = function (req, res) {
@@ -21,7 +21,7 @@ module.exports.post_newuser = function (req, res) {
     if (err) throw err;
     // do not detect if email already exists
 
-    var table = "testuser"; // table name
+    var table = "user"; // table name
     // var sql = `INSERT INTO ${table} (email, password, id, type, name, cellphone, favouriteType) VALUES ('${email}', '${password}', ${id}, '${type}', '${name}', '${cellphone}', '${favouriteType}')`;
     var sql = `INSERT INTO ${table} (email, password, type, name, cellphone, favouriteType) VALUES ('${email}', '${password}', '${type}', '${name}', '${cellphone}', '${favouriteType}')`;
     mysqldb.query(sql, function (err, result) {
@@ -30,12 +30,10 @@ module.exports.post_newuser = function (req, res) {
     });
   });
 
-
-
-  res.render("index",{
-    title: 'Reservation',
-    user: req.user == undefined ? 'none' : req.user,
-    action: 'none',
-    msg: 'none'
+  res.render("index", {
+    title: "Reservation",
+    user: req.user == undefined ? "none" : req.user,
+    action: "none",
+    msg: "none",
   });
 };

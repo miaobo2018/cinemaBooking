@@ -6,7 +6,7 @@ var pool = mysql.createPool({
   host: "localhost",
   user: "root",
   password: "Mb2047809!!",
-  database: "testmysqldb", // schema name
+  database: "cinema_booking", // schema name
 });
 var async = require("async");
 
@@ -20,7 +20,7 @@ exports.showuser = function () {
     pool.getConnection(function (err, mysqldb) {
       if (err) throw err;
 
-      var table = "testuser"; // table name
+      var table = "user"; // table name
       var sql = `SELECT * FROM ${table}`;
       mysqldb.query(sql, function (err, result, fields) {
         if (err) throw err;
@@ -39,6 +39,7 @@ exports.showuser = function () {
 };
 
 exports.deleteuser = function () {
+  // select -> del get
   return function (req, res) {
     res.render("index", {
       title: "Delete user",
@@ -70,6 +71,17 @@ exports.deleteuserCRUD = function () {
     /**
      * 后端删除该user账号
      */
+    pool.getConnection(function (err, mysqldb) {
+      if (err) throw err;
+
+      var table = "user"; // table name
+      var sql = `DELETE FROM ${table} WHERE email = '${username}'`;
+      mysqldb.query(sql, function (err, result) {
+        if (err) throw err;
+        console.log("Delete Finished");
+      });
+      pool.releaseConnection(mysqldb);
+    });
 
     res.redirect("showuser");
   };
@@ -77,13 +89,25 @@ exports.deleteuserCRUD = function () {
 
 exports.edituserCRUD = function () {
   return function (req, res) {
-    var username = req.user.username;
+    // var username = req.user.username;
     var NameNew = req.body.nameNew;
     var EmailNew = req.body.emailNew;
     var PhoneNew = req.body.phoneNew;
     /**
      * 后端更新该账号
      */
+    // 无法拿到req.user 所以还是通过输入邮箱获取
+    pool.getConnection(function (err, mysqldb) {
+      if (err) throw err;
+
+      var table = "user"; // table name
+      var sql = `UPDATE ${table} SET name = '${NameNew}', cellphone = '${PhoneNew}' WHERE email = '${EmailNew}'`;
+      mysqldb.query(sql, function (err, result) {
+        if (err) throw err;
+        console.log("Update Finished");
+      });
+      pool.releaseConnection(mysqldb);
+    });
 
     res.redirect("showuser");
   };
