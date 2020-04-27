@@ -1,6 +1,6 @@
 "use strict";
 var mysql = require("mysql");
-var mysqldb = mysql.createConnection({
+var pool = mysql.createPool({
   host: "localhost",
   user: "root",
   password: "Mb2047809!!",
@@ -50,12 +50,27 @@ exports.showmovieCRUD = function () {
      * 返回所有movies 格式为 movies = [{name:"Harry Potter", room:1, day:Monday, startTime:4:00}, {...}]
      */
 
-    res.render("index", {
-      title: "Show movies",
-      user: req.user == undefined ? "none" : req.user,
-      returnList: movies,
-      action: "showmovie",
-      msg: "none",
+    var movies = "none";
+
+    pool.getConnection(function (err, mysqldb) {
+      if (err) throw err;
+
+      var table = "screening"; // table name
+      var sql = `SELECT * FROM ${table}`;
+
+      mysqldb.query(sql, function (err, result, fields) {
+        if (err) throw err;
+        movies = result;
+        console.log(movies);
+        res.render("index", {
+          title: "Show movies",
+          user: req.user == undefined ? "none" : req.user,
+          returnList: movies,
+          action: "showmovie",
+          msg: "none",
+        });
+      });
+      pool.releaseConnection(mysqldb);
     });
   };
 };

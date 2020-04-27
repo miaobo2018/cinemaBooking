@@ -164,17 +164,17 @@ DROP TABLE IF EXISTS `screening`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `screening` (
   `screeningId` int(11) NOT NULL AUTO_INCREMENT,
-  `screeningDay` varchar(20) DEFAULT NULL,
+  `day` varchar(20) DEFAULT NULL,
   `startTime` varchar(20) DEFAULT NULL,
   `sfilmId` int(11) NOT NULL,
-  `sfilmName` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
   `sfilmPrice` decimal(5,2) NOT NULL,
-  `sroomId` int(11) NOT NULL,
+  `room` int(11) NOT NULL,
   PRIMARY KEY (`screeningId`),
   KEY `sfilmId` (`sfilmId`),
-  KEY `sroomId` (`sroomId`),
+  KEY `room` (`room`),
   CONSTRAINT `screening_ibfk_1` FOREIGN KEY (`sfilmId`) REFERENCES `film` (`filmId`),
-  CONSTRAINT `screening_ibfk_2` FOREIGN KEY (`sroomId`) REFERENCES `room` (`roomNum`)
+  CONSTRAINT `screening_ibfk_2` FOREIGN KEY (`room`) REFERENCES `room` (`roomNum`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
