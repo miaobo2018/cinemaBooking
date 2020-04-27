@@ -1,3 +1,0 @@
-/*
-Modules File contains js file related to db
-*/
