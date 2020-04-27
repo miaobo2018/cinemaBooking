@@ -3,7 +3,6 @@
 "use strict";
 
 /* Default */
-
 var mysql = require("mysql");
 var mysqldb = mysql.createConnection({
   host: "localhost",
@@ -43,4 +42,5 @@ exports.makeReservation = function (req, res) {
   /**
    * 存入所有预约信息到数据库  seats是数组形式，包含了所有预约的座位号 ["A1","B2","F3","C5"]
    */
+  // 最后
 };

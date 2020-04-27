@@ -4,29 +4,18 @@
 
 /* Default */
 var mysql = require("mysql");
-var pool = mysql.createPool({
+var mysqldb = mysql.createConnection({
   host: "localhost",
   user: "root",
   password: "Mb2047809!!",
-  database: "cinema_booking",
+  database: "cinema_booking", // schema name
 });
 
 exports.shownewsCRUD = function () {
   return function (req, res) {
-    pool.getConnection(function (err, connection) {
-      if (err) throw err;
-
-      var table = "advertisement"; // table name
-      var sql = `SELECT * FROM ${table} `;
-
-      connection.query(sql, function (err, news, fields) {
-        // console.log("news", news);
-        connection.release();
-        res.json({
-          news: news,
-        });
-      });
-    });
+    /**
+     * 读取所有广告，这里news就是广告的意思 返回形式 object数组 [{title: "Harry Potter is comming!", content:"This is the 7th series!..."},{....}]
+     */
   };
 };
 
