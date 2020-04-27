@@ -92,12 +92,15 @@ app.post("/edituserCRUD", users.edituserCRUD()); //ok
 /* Movie */
 app.get("/showmovie", movies.showmovieCRUD()); //ok
 app.get("/addmovie", movies.addmovie());
-app.get("/deletemovie", isLoggedAdminIn, movies.deletemovie());
+// app.get("/deletemovie", isLoggedAdminIn, movies.deletemovie());
+app.get("/deletemovie", movies.deletemovie());
 app.get("/editmovie", movies.editmovie());
 // app.post("/addmovieCRUD", isLoggedAdminIn, movies.addmovieCRUD());
-app.post("/addmovieCRUD", movies.addmovieCRUD());
-app.post("/deletemovieCRUD", isLoggedAdminIn, movies.deletemovieCRUD());
-app.post("/editmovieCRUD", isLoggedAdminIn, movies.editmovieCRUD());
+app.post("/addmovieCRUD", movies.addmovieCRUD()); //ok
+// app.post("/deletemovieCRUD", isLoggedAdminIn, movies.deletemovieCRUD());
+app.post("/deletemovieCRUD", movies.deletemovieCRUD()); //ok
+// app.post("/editmovieCRUD", isLoggedAdminIn, movies.editmovieCRUD());
+app.post("/editmovieCRUD", movies.editmovieCRUD()); //ok 限单一操作 因为只能选1个 day 1个hour
 
 /* AJAX - bases data */
 app.post("/getmovies", movies.getmovies);

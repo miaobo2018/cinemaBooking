@@ -81,9 +81,8 @@ exports.deleteuserCRUD = function () {
         console.log("Delete Finished");
       });
       pool.releaseConnection(mysqldb);
+      res.redirect("showuser");
     });
-
-    res.redirect("showuser");
   };
 };
 

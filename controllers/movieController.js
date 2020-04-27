@@ -137,9 +137,31 @@ exports.deletemovieCRUD = function () {
     /**
      * 需要后端根据movieName删除该电影
      */
-
-    res.location("showmovie");
-    res.redirect("showmovie");
+    // delete in film
+    // delete in screening
+    // sql Table: film; Att: filmName(movieName), type(movieType), length(movieLength), price(moviePrice)
+    // sql Table: screenging; Att: day(days), startTime(hours), sfilmId(???), name(movieName), sfilmPrice(moviePrice), room(hallNumber)
+    pool.getConnection(function (err, mysqldb) {
+      if (err) throw err;
+      var table1 = "film";
+      var table2 = "screening";
+      // 先在screening(child)删除记录 再在film(parent)删除记录
+      // delete in screening table
+      var sqlDeleteFilm = `DELETE FROM ${table1} WHERE filmName = '${movieName}'`;
+      var sqlDeleteScreening = `DELETE FROM ${table2} WHERE name = '${movieName}'`;
+      mysqldb.query(sqlDeleteScreening, function (err, result) {
+        if (err) throw err;
+        console.log("Target Film Deleted in Screening Table");
+        // delete in film table
+        mysqldb.query(sqlDeleteFilm, function (err, result) {
+          if (err) throw err;
+          console.log("Target Film Deleted in Film Table");
+        });
+      });
+      pool.releaseConnection(mysqldb);
+      res.location("showmovie");
+      res.redirect("showmovie");
+    });
   };
 };
 
@@ -157,8 +179,52 @@ exports.editmovieCRUD = function () {
     /**
      * 需要后端根据movieName查找到该记录 删除该记录 并添加新的movie
      */
-    res.location("showmovie");
-    res.redirect("showmovie");
+    // dayNew 与 hourNew 都是单一元素 不是list
+    // 先删 再加
+    pool.getConnection(function (err, mysqldb) {
+      if (err) throw err;
+      var table1 = "film";
+      var table2 = "screening";
+      // 先在screening(child)删除记录 再在film(parent)删除记录
+      // delete in screening table
+      var sqlDeleteFilm = `DELETE FROM ${table1} WHERE filmName = '${movieName}'`;
+      var sqlDeleteScreening = `DELETE FROM ${table2} WHERE name = '${movieName}'`;
+      mysqldb.query(sqlDeleteScreening, function (err, result) {
+        if (err) throw err;
+        console.log("Target Film Deleted in Screening Table");
+        // delete in film table
+        mysqldb.query(sqlDeleteFilm, function (err, result) {
+          if (err) throw err;
+          console.log("Target Film Deleted in Film Table");
+          // insert block begin
+          // insert into film table
+          var sqlInsertFilm = `INSERT INTO ${table1} (filmName, type, length, price) VALUES ('${movieNameNew}', '${movieType}', ${movieLength}, ${moviePrice})`;
+          mysqldb.query(sqlInsertFilm, function (err, result) {
+            if (err) throw err;
+            console.log("New Film Inserted");
+            var sqlSelectFilmId = `SELECT filmId FROM ${table1} WHERE filmName = '${movieNameNew}'`;
+            var newFilmId = 0;
+            // get the newFilmId
+            mysqldb.query(sqlSelectFilmId, function (err, result, fields) {
+              if (err) throw err;
+              newFilmId = result[0].filmId;
+              console.log(newFilmId);
+              // insert into screening table
+              var sqlInsertScreening = `INSERT INTO ${table2} (day, startTime, sfilmId, name, sfilmPrice, room) VALUES ('${dayNew}', '${hourNew}', ${newFilmId}, '${movieNameNew}', ${moviePrice}, ${hallNumberNew})`;
+              mysqldb.query(sqlInsertScreening, function (err, result) {
+                if (err) throw err;
+                console.log("New Screening Inserted");
+              });
+              pool.releaseConnection(mysqldb);
+              res.location("showmovie");
+              res.redirect("showmovie");
+            });
+          });
+          // insert block end
+        });
+      });
+    });
+    // ...
   };
 };
 
