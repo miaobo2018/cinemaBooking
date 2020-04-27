@@ -28,6 +28,7 @@ module.exports.post_newuser = function (req, res) {
       if (err) throw err;
       console.log("New User Inserted");
     });
+    pool.releaseConnection(mysqldb);
   });
 
   res.render("index", {

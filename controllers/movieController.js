@@ -61,7 +61,7 @@ exports.showmovieCRUD = function () {
       mysqldb.query(sql, function (err, result, fields) {
         if (err) throw err;
         movies = result;
-        console.log(movies);
+        // console.log(movies);
         res.render("index", {
           title: "Show movies",
           user: req.user == undefined ? "none" : req.user,
@@ -89,10 +89,44 @@ exports.addmovieCRUD = function () {
      * 需要后端保存新的电影 hall就是room 注意这里的days可能是单个日期 也可能是一个日期数组 hours同理 写入后端的时候要分情况
      * 考虑
      */
-    // [1]no 1yes; [1,2]
+    // sql Table: film; Att: filmName(movieName), type(movieType), length(movieLength), price(moviePrice)
+    // sql Table: screenging; Att: day(days), startTime(hours), sfilmId(???), name(movieName), sfilmPrice(moviePrice), room(hallNumber)
+    pool.getConnection(function (err, mysqldb) {
+      if (err) throw err;
 
-    res.location("showmovie");
-    res.redirect("showmovie");
+      var table1 = "film";
+      var table2 = "screening";
+      // insert into film table
+      var sqlInsertFilm = `INSERT INTO ${table1} (filmName, type, length, price) VALUES ('${movieName}', '${movieType}', ${movieLength}, ${moviePrice})`;
+      mysqldb.query(sqlInsertFilm, function (err, result) {
+        if (err) throw err;
+        console.log("New Film Inserted");
+        var sqlSelectFilmId = `SELECT filmId FROM ${table1} WHERE filmName = '${movieName}'`;
+        var newFilmId = 0;
+        // get the newFilmId
+        mysqldb.query(sqlSelectFilmId, function (err, result, fields) {
+          if (err) throw err;
+          newFilmId = result[0].filmId;
+          console.log(newFilmId);
+          // insert into screening table
+          for (var i = 0; i < days.length; i++) {
+            var day = days[i];
+            for (var j = 0; j < hours.length; j++) {
+              var hour = hours[j];
+              var sqlInsertScreening = `INSERT INTO ${table2} (day, startTime, sfilmId, name, sfilmPrice, room) VALUES ('${day}', '${hour}', ${newFilmId}, '${movieName}', ${moviePrice}, ${hallNumber})`;
+              mysqldb.query(sqlInsertScreening, function (err, result) {
+                if (err) throw err;
+                console.log("New Screening Inserted");
+              });
+            }
+          }
+        });
+      });
+
+      pool.releaseConnection(mysqldb);
+      res.location("showmovie");
+      res.redirect("showmovie");
+    });
   };
 };
 

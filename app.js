@@ -86,15 +86,16 @@ app.get("/showuser", users.showuser()); //ok
 app.get("/deleteuser", users.deleteuser());
 app.get("/edituser", users.edituser());
 // app.post("/deleteuserCRUD", isLoggedAdminIn, users.deleteuserCRUD());
-app.post("/deleteuserCRUD", users.deleteuserCRUD());
+app.post("/deleteuserCRUD", users.deleteuserCRUD()); //ok
 app.post("/edituserCRUD", users.edituserCRUD()); //ok
 
 /* Movie */
-app.get("/showmovie", movies.showmovieCRUD());
+app.get("/showmovie", movies.showmovieCRUD()); //ok
 app.get("/addmovie", movies.addmovie());
 app.get("/deletemovie", isLoggedAdminIn, movies.deletemovie());
 app.get("/editmovie", movies.editmovie());
-app.post("/addmovieCRUD", isLoggedAdminIn, movies.addmovieCRUD());
+// app.post("/addmovieCRUD", isLoggedAdminIn, movies.addmovieCRUD());
+app.post("/addmovieCRUD", movies.addmovieCRUD());
 app.post("/deletemovieCRUD", isLoggedAdminIn, movies.deletemovieCRUD());
 app.post("/editmovieCRUD", isLoggedAdminIn, movies.editmovieCRUD());
 
