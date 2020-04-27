@@ -1,6 +1,6 @@
 // 本例子采取pool进行conn练习 一定注意异步问题！！
 var mysql = require("mysql");
-var pool = mysql.createPool({
+var mysqldb = mysql.createConnection({
   host: "localhost",
   user: "root",
   password: "Mb2047809!!",

@@ -8,6 +8,7 @@ var pool = mysql.createPool({
   password: "Mb2047809!!",
   database: "cinema_booking", // schema name
 });
+
 var async = require("async");
 
 exports.showuser = function () {
@@ -39,7 +40,6 @@ exports.showuser = function () {
 };
 
 exports.deleteuser = function () {
-  // select -> del get
   return function (req, res) {
     res.render("index", {
       title: "Delete user",
@@ -75,7 +75,7 @@ exports.deleteuserCRUD = function () {
       if (err) throw err;
 
       var table = "user"; // table name
-      var sql = `DELETE FROM ${table} WHERE email = '${username}'`;
+      var sql = `DELETE FROM ${table} WHERE name = '${username}'`;
       mysqldb.query(sql, function (err, result) {
         if (err) throw err;
         console.log("Delete Finished");
@@ -88,19 +88,19 @@ exports.deleteuserCRUD = function () {
 
 exports.edituserCRUD = function () {
   return function (req, res) {
-    // var username = req.user.username;
-    var NameNew = req.body.nameNew;
+    var username = req.user.name;
+    var FavouriteTypeNew = req.body.favouriteTypeNew;
     var EmailNew = req.body.emailNew;
     var PhoneNew = req.body.phoneNew;
     /**
      * 后端更新该账号
      */
-    // 无法拿到req.user 所以还是通过输入邮箱获取
+    console.log(username);
     pool.getConnection(function (err, mysqldb) {
       if (err) throw err;
-
+      // unable to update username otherwise session doesn't work well
       var table = "user"; // table name
-      var sql = `UPDATE ${table} SET name = '${NameNew}', cellphone = '${PhoneNew}' WHERE email = '${EmailNew}'`;
+      var sql = `UPDATE ${table} SET favouriteType = '${FavouriteTypeNew}', email = '${EmailNew}', cellphone = '${PhoneNew}' WHERE name = '${username}'`;
       mysqldb.query(sql, function (err, result) {
         if (err) throw err;
         console.log("Update Finished");

@@ -6,7 +6,6 @@ var pool = mysql.createPool({
   password: "Mb2047809!!",
   database: "cinema_booking", // schema name
 });
-
 exports.addmovie = function () {
   return function (req, res) {
     res.render("index", {
@@ -84,16 +83,12 @@ exports.addmovieCRUD = function () {
     var hallNumber = req.body.hall;
     var days = req.body.day;
     var hours = req.body.hour;
-
     /**
      * 需要后端保存新的电影 hall就是room 注意这里的days可能是单个日期 也可能是一个日期数组 hours同理 写入后端的时候要分情况
      * 考虑
      */
-    // sql Table: film; Att: filmName(movieName), type(movieType), length(movieLength), price(moviePrice)
-    // sql Table: screenging; Att: day(days), startTime(hours), sfilmId(???), name(movieName), sfilmPrice(moviePrice), room(hallNumber)
     pool.getConnection(function (err, mysqldb) {
       if (err) throw err;
-
       var table1 = "film";
       var table2 = "screening";
       // insert into film table
@@ -122,7 +117,6 @@ exports.addmovieCRUD = function () {
           }
         });
       });
-
       pool.releaseConnection(mysqldb);
       res.location("showmovie");
       res.redirect("showmovie");
@@ -133,14 +127,9 @@ exports.addmovieCRUD = function () {
 exports.deletemovieCRUD = function () {
   return function (req, res) {
     var movieName = req.body.movie;
-
     /**
      * 需要后端根据movieName删除该电影
      */
-    // delete in film
-    // delete in screening
-    // sql Table: film; Att: filmName(movieName), type(movieType), length(movieLength), price(moviePrice)
-    // sql Table: screenging; Att: day(days), startTime(hours), sfilmId(???), name(movieName), sfilmPrice(moviePrice), room(hallNumber)
     pool.getConnection(function (err, mysqldb) {
       if (err) throw err;
       var table1 = "film";
@@ -175,7 +164,6 @@ exports.editmovieCRUD = function () {
     var hallNumberNew = req.body.hallNew;
     var dayNew = req.body.dayNew;
     var hourNew = req.body.hourNew;
-
     /**
      * 需要后端根据movieName查找到该记录 删除该记录 并添加新的movie
      */
@@ -224,33 +212,101 @@ exports.editmovieCRUD = function () {
         });
       });
     });
-    // ...
+  };
+};
+
+exports.search = function () {
+  return function (req, res) {
+    res.render("index", {
+      title: "Search movies",
+      user: req.user == undefined ? "none" : req.user,
+      action: "search_movie",
+      msg: "none",
+    });
+  };
+};
+
+exports.searchMovies = function () {
+  return function (req, res) {
+    var movieName = req.body.search;
+    movieName = movieName.toString();
+
+    pool.getConnection(function (err, connection) {
+      if (err) throw err;
+
+      var table = "screening"; // table name
+      var sql = `SELECT name, day, startTime, sfilmPrice, room from ${table} WHERE name = '${movieName}';`;
+      connection.query(sql, function (err, result) {
+        if (err) throw err;
+        console.log("successfully query screening table");
+        console.log(result);
+
+        res.render("index", {
+          title: "Search Results",
+          user: req.user == undefined ? "none" : req.user,
+          returnList: result,
+          action: "show_search_result",
+          msg: "none",
+        });
+      });
+    });
   };
 };
 
 /* AJAX */
 exports.getmovies = function (req, res) {
-  /**
-   * 返回所有电影名称，数组形式 ["Harry Potter","Price White",...]
-   */
-  // return [] res.send(...) ??? 待定
+  pool.getConnection(function (err, connection) {
+    if (err) throw err;
+
+    var table = "film"; // table name
+    var sql = `SELECT filmName FROM ${table} `;
+
+    connection.query(sql, function (err, movies, fields) {
+      connection.release();
+      // console.log(movies);
+      res.json({
+        movies: movies,
+      });
+    });
+  });
 };
 
 exports.getdays = function (req, res) {
   var movieName = req.body.movieName;
-  /**
-   * 根据movieName返回所有上映的日期，object数组形式 [{name:"harry potter",day:"Monday",room: 1},...]
-   * 这里day和room必须返回 返回room是为了计算房间座位列表，每个房间座位总数可能不同
-   */
+  // console.log('movieName', movieName);
+  pool.getConnection(function (err, connection) {
+    if (err) throw err;
+
+    var table = "screening"; // table name
+    var sql = `SELECT day, room FROM ${table} WHERE name = '${movieName}' `;
+
+    connection.query(sql, function (err, days, fields) {
+      connection.release();
+      // console.log(movies);
+      res.json({
+        days: days,
+      });
+    });
+  });
 };
 
 exports.gethours = function (req, res) {
   var movieName = req.body.movieName;
   var movieDay = req.body.movieDay;
+  pool.getConnection(function (err, connection) {
+    if (err) throw err;
 
-  /**
-   * 根据movieName,和上映日期 返回所有startTime数组 ["8:00","9:00","12:00"]
-   */
+    var table = "screening"; // table name
+    var sql = `SELECT startTime FROM ${table} WHERE name = '${movieName}' and Day = '${movieDay}' `;
+
+    connection.query(sql, function (err, startTimes, fields) {
+      connection.release();
+      // console.log(movies);
+      res.json({
+        startTimes: startTimes,
+      });
+    });
+  });
 };
 
 exports.getPrice = function (req, res) {

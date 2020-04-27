@@ -9,7 +9,7 @@ var mysqldb = mysql.createConnection({
 module.exports.post_userlogin = function (req, res) {
   // login function
   // need to judge whether it is admin or user
-  var email = req.body.username; // in frontend it called username
+  var name = req.body.username; // in frontend it called username
   var password = req.body.password;
 
   mysqldb.connect(function (err) {
@@ -17,32 +17,30 @@ module.exports.post_userlogin = function (req, res) {
     console.log("Connect to MySQL DB");
 
     var table = "user"; // table name
-    var sql = `SELECT email, password FROM ${table}`;
+    var sql = `SELECT name, password FROM ${table}`;
 
     mysqldb.query(sql, function (err, result, fields) {
       if (err) throw err;
       var i;
       for (i = 0; i < result.length; i++) {
-        if (email === result[i].email && password === result[i].password) {
+        if (name === result[i].name && password === result[i].password) {
           // Login Success -> Dashborad Page
           console.log("Success");
-          return res.send("Login Success");
+          return res.render("index", {
+            title: "Reservation",
+            user: req.user == undefined ? "none" : req.user,
+            action: "none",
+            msg: "none",
+          });
         }
-        if (email === result[i].email && password != result[i].password) {
+        if (name === result[i].name && password != result[i].password) {
           // Password Wrong -> redirect
           console.log("Password Wrong");
-          return res.redirect("index");
+          return res.redirect("/login");
         }
       }
-
-      // No User/Email
-      console.log("Email Wrong");
-      return res.redirect("index", {
-        title: "Reservation",
-        user: req.user == undefined ? "none" : req.user,
-        action: "none",
-        msg: "none",
-      });
+      console.log("No username found!");
+      return res.redirect("/login");
     });
   });
 };

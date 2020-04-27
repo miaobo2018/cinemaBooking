@@ -14,7 +14,7 @@
   <%- include("defaultparts/header.ejs") %>
   <main>
     <% if (user != 'none') { %>
-      <div id="hello">Hello <span id="nameofuser" style="color: #FFF"><%= user.username %> Welcome to SJSU Cinema!</span>!</div>
+      <div id="hello">Hello <span id="nameofuser" style="color: #FFF"><%= user.name %>, welcome to SJSU Cinema!</span>!</div>
     <% } else { %>
       <% if (action == 'none') { %>
         <div id="hello">Please login first to book seats</div>
@@ -110,6 +110,36 @@
       <div id="summationList"></div>
       <div id="finishReservation">Book!</div>
     <% } %>
+      <%  if (action == 'rating') { %>
+        <%- include("ratingparts/rating.ejs") %>
+
+      <% } %>
+      <%  if (action == 'search_movie') { %>
+        <%- include("searchparts/searchmovie.ejs") %>
+
+      <% } %>
+    <% if (action == "show_search_result") {%>
+     <div>
+      <div><label>Film Name</label>
+        <label> Screening Day</label>
+        <label>Start Time</label>
+        <label>Ticket Price</label>
+        <label>Room</label>
+      </div>
+        <% for(var i=0; i<returnList.length; i++) { %>
+          <div>
+            <%= returnList[i].name %>
+            <%= returnList[i].day %>
+            <%= returnList[i].startTime %>
+            <%= returnList[i].sfilmPrice %>
+            <%= returnList[i].room %>
+
+          </div>
+      <% } %>
+</div>
+      <%} %>
+
+
   </main>
   <%- include("defaultparts/footer.ejs") %>
 </div>
