@@ -17,7 +17,7 @@ var mysql = require("mysql");
 var pool = mysql.createPool({
   host: "localhost",
   user: "root",
-  password: "liu54420322",
+  password: "Mb2047809!!",
   database: "cinema_booking",
 });
 
@@ -94,7 +94,9 @@ passport.use(
 );
 
 //login用户名密码检验 并生成user用户 传到后续所有页面 相当于替代了原来的loginController的post功能
-passport.use("login", new LocalStrategy(
+passport.use(
+  "login",
+  new LocalStrategy(
     {
       usernameField: "username",
       passwordField: "password",
@@ -177,6 +179,20 @@ app.post(
     failureFlash: true,
   })
 );
+
+// get logout
+app.get("/logout", function (req, res, next) {
+  if (req.session) {
+    // delete session object
+    req.session.destroy(function (err) {
+      if (err) {
+        return next(err);
+      } else {
+        return res.redirect("/");
+      }
+    });
+  }
+});
 
 function isLoggedAdminIn(req, res, next) {
   if (req.user.name == "admin") {

@@ -38,7 +38,7 @@ CREATE TABLE `advertisement` (
 
 LOCK TABLES `advertisement` WRITE;
 /*!40000 ALTER TABLE `advertisement` DISABLE KEYS */;
-INSERT INTO `advertisement` VALUES (1,'Welcome','Welcome to Cinema Booking Application!'),(2,'Spies In Disguise','Super spy Lance Sterling (Will Smith) and scientist Walter Beckett (Tom Holland) are almost exact opposites. Lance is smooth, suave and debonair. Walter is... not. But what Walter lacks in social skills he makes up for in smarts and invention, creating the awesome gadgets Lance uses on his epic missions.'),(3,'Underwater','UNDERWATER is a film that follows a crew of underwater researchers who must scramble to safety after an earthquake devastates their subterranean laboratory.'),(4,'Rate Pormotion','You may win some free tickets if you rate the movies after watching!'),(5,'Coupon','You have a 20% off coupon in your account!');
+INSERT INTO `advertisement` VALUES (1,'Welcome','Welcome to Cinema Booking Application!'),(2,'Spies In Disguise','Super spy Lance Sterling (Will Smith) and scientist Walter Beckett (Tom Holland) are almost exact opposites.'),(3,'Underwater','UNDERWATER is a film that follows a crew of underwater researchers who must scramble to safety after an earthquake devastates their subterranean laboratory.'),(4,'Rate Pormotion','You may win some free tickets if you rate the movies after watching!'),(5,'Coupon','You have a 20% off coupon in your account!');
 /*!40000 ALTER TABLE `advertisement` ENABLE KEYS */;
 UNLOCK TABLES;
 

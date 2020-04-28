@@ -3,7 +3,7 @@ var mysql = require("mysql");
 var pool = mysql.createPool({
   host: "localhost",
   user: "root",
-  password: "liu54420322",
+  password: "Mb2047809!!",
   database: "cinema_booking", // schema name
 });
 exports.addmovie = function () {
@@ -324,10 +324,8 @@ exports.getPrice = function (req, res) {
       connection.release();
       // console.log(movies);
       res.json({
-        "price": price
+        price: price,
       });
-
     });
   });
-
 };
