@@ -164,17 +164,17 @@ DROP TABLE IF EXISTS `screening`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `screening` (
   `screeningId` int(11) NOT NULL AUTO_INCREMENT,
-  `screeningDay` varchar(20) DEFAULT NULL,
+  `day` varchar(20) DEFAULT NULL,
   `startTime` varchar(20) DEFAULT NULL,
   `sfilmId` int(11) NOT NULL,
-  `sfilmName` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
   `sfilmPrice` decimal(5,2) NOT NULL,
-  `sroomId` int(11) NOT NULL,
+  `room` int(11) NOT NULL,
   PRIMARY KEY (`screeningId`),
   KEY `sfilmId` (`sfilmId`),
-  KEY `sroomId` (`sroomId`),
+  KEY `room` (`room`),
   CONSTRAINT `screening_ibfk_1` FOREIGN KEY (`sfilmId`) REFERENCES `film` (`filmId`),
-  CONSTRAINT `screening_ibfk_2` FOREIGN KEY (`sroomId`) REFERENCES `room` (`roomNum`)
+  CONSTRAINT `screening_ibfk_2` FOREIGN KEY (`room`) REFERENCES `room` (`roomNum`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -242,7 +242,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'miaobo@miaobo.com','miaobo',1,'miaobo','4088888888','History'),(2,'xiaoming@xiaoming.com','xiaoming',1,'xiaoming','4087777777','Comedy'),(3,'junyan@junyan.com','junyan',1,'junyan','4086666666','Sci-Fi'),(4,'Alice@gmail.com','Alice',0,'Alice','4081234567','Adventure'),(5,'Bob@gmail.com','Bob',0,'Bob','4081234567','Drama'),(6,'Carrol@gmail.com','Carrol',0,'Carrol','4082345671','Action'),(7,'David@gmail.com','David',0,'David','4083456712','Animation'),(8,'Eric@gmail.com','Eric',0,'Eric','4084567123','Classic'),(9,'Frank@gmail.com','Frank',0,'Frank','4085671234','Crime'),(10,'Gigi@gmail.com','Gigi',0,'Gigi','4086712345','Family');
+INSERT INTO `user` VALUES (1,'admin','admin',1,'admin','4088888888','Admin'), (2,'miaobo@miaobo.com','miaobo',1,'miaobo','4088888888','History'),(3,'xiaoming@xiaoming.com','xiaoming',1,'xiaoming','4087777777','Comedy'),(4,'junyan@junyan.com','junyan',1,'junyan','4086666666','Sci-Fi'),(5,'Alice@gmail.com','Alice',0,'Alice','4081234567','Adventure'),(6,'Bob@gmail.com','Bob',0,'Bob','4081234567','Drama'),(7,'Carrol@gmail.com','Carrol',0,'Carrol','4082345671','Action'),(8,'David@gmail.com','David',0,'David','4083456712','Animation'),(9,'Eric@gmail.com','Eric',0,'Eric','4084567123','Classic'),(10,'Frank@gmail.com','Frank',0,'Frank','4085671234','Crime'),(11,'Gigi@gmail.com','Gigi',0,'Gigi','4086712345','Family');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
