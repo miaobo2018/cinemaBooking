@@ -3,7 +3,7 @@ var mysql = require("mysql");
 var pool = mysql.createPool({
   host: "localhost",
   user: "root",
-  password: "Mb2047809!!",
+  password: "liu54420322",
   database: "cinema_booking", // schema name
 });
 exports.addmovie = function () {
@@ -314,7 +314,20 @@ exports.getPrice = function (req, res) {
   var movieDay = req.body.movieDay;
   var movieHour = req.body.movieStartTime;
 
-  /**
-   * 根据电影名字和日期和开始时间返回票价，直接返回整数
-   */
+  pool.getConnection(function (err, connection) {
+    if (err) throw err;
+
+    var table = "screening"; // table name
+    var sql = `SELECT sfilmPrice FROM ${table} WHERE name = '${movieName}' and day = '${movieDay}' and startTime = '${movieHour}'`;
+
+    connection.query(sql, function (err, price, fields) {
+      connection.release();
+      // console.log(movies);
+      res.json({
+        "price": price
+      });
+
+    });
+  });
+
 };

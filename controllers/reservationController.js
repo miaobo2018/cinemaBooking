@@ -5,21 +5,33 @@
 /* Default */
 
 var mysql = require("mysql");
-var mysqldb = mysql.createConnection({
+var pool = mysql.createPool({
   host: "localhost",
   user: "root",
-  password: "Mb2047809!!",
+  password: "liu54420322",
   database: "cinema_booking", // schema name
 });
 
 exports.getreservation = function (req, res) {
   var movieName = req.body.movieName;
   var movieDay = req.body.movieDay;
-  var movieHour = req.body.movieStartTime;
+  var movieHour = req.body.movieHour;
+  pool.getConnection(function (err, connection) {
+    if (err) throw err;
 
-  /**
-   * 根据电影名日期和开始时间返回已经预定的所有座位,前端要求返回座位号数组 ["A1","B2","F3","C5"]
-   */
+    var table = "booking"; // table name
+    var sql = `SELECT seat FROM ${table} WHERE filmname = '${movieName}' and day = '${movieDay}' and startTime = '${movieHour}'`;
+
+    connection.query(sql, function (err, seats, fields) {
+      connection.release();
+      // console.log(movies);
+      res.json({
+        "seats": seats
+      });
+
+    });
+  });
+
 };
 
 exports.getinformationaboutseat = function (req, res) {
@@ -40,7 +52,26 @@ exports.makeReservation = function (req, res) {
   var name = req.body.name;
   var email = req.body.email;
   var phone = req.body.phone;
-  /**
-   * 存入所有预约信息到数据库  seats是数组形式，包含了所有预约的座位号 ["A1","B2","F3","C5"]
-   */
+
+
+  pool.getConnection(function (err, connection) {
+    if (err) throw err;
+    //这里for循环一定要房子getConnection里面！！！！
+    for (var i = 0; i < seats.length;i++) {
+    var table = 'booking'; // table name
+
+
+    var sql = `INSERT INTO ${table} (username, filmname, day, startTime, seat) VALUES ('${name}', '${movieName}', '${movieDay}', '${movieHour}', '${seats[i]}')`;
+    connection.query(sql, function (err, result, fields) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log("Insert successfully!")
+      }
+      ;
+
+    });
+  };
+    connection.release();
+})
 };

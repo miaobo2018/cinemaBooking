@@ -244,27 +244,30 @@ $(document).ready(function () {
     });
   });
   // 确定时间后，读取票价
-  $("#startTime").change(function () {
+  $('#startTime').change(function () {
+    $("#movie, #day, #startTime").change(enableSelection);
+    checkBaseData();
+    clearClickedSeat();
     $.ajax({
-      url: "/getPrice",
-      type: "POST",
+      url: '/getPrice',
+      type: 'POST',
       data: {
-        movieName: $("#movie").val(),
-        movieDay: $("#day").val(),
-        movieStartTime: $("#startTime").val(),
+        "movieName": $("#movie").val(),
+        "movieDay": $("#day").val(),
+        "movieStartTime": $("#startTime").val()
       },
       success: function (data) {
         $("#price").empty();
         $("#price").val("");
 
-        $("#price").val(data);
+        $("#price").val(data.price[0].sfilmPrice);
 
-        $("#movie, #day, #startTime").change(enableSelection);
-        checkBaseData();
-        clearClickedSeat();
-      },
+
+
+      }
     });
   });
+
 
   //选项颜色调整 用户每选择一个option 下一个选项就激活
   function enableSelection() {
@@ -418,6 +421,7 @@ $(document).ready(function () {
       $("#ticket").slideDown(200);
       $("#hall").slideDown(500);
       $("#hall").ready(function () {
+
         $.ajax({
           url: "/getreservation",
           type: "POST",
@@ -427,8 +431,9 @@ $(document).ready(function () {
             movieHour: $("#startTime").val(),
           },
         }).done(function (data) {
-          for (var i = 0; i < data.length; i++) {
-            $('#hall div [value="' + data[i] + '"]').css(
+          console.log(data);
+          for (var i = 0; i < data.seats.length; i++) {
+            $('#hall div [value="' + data.seats[i].seat + '"]').css(
               "background-color",
               "red"
             );
@@ -492,7 +497,7 @@ $(document).ready(function () {
     }
 
     if ($(this).css("background-color") === "rgb(85, 85, 85)") {
-      if (numberSeatsToReservation >= clickedSeat) {
+      if (numberSeatsToReservation > clickedSeat) {
         $(this).css("background-color", "green");
         $(this).css("color", "#FFF");
         clickedSeat = ++clickedSeat;

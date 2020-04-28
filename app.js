@@ -17,7 +17,7 @@ var mysql = require("mysql");
 var pool = mysql.createPool({
   host: "localhost",
   user: "root",
-  password: "Mb2047809!!",
+  password: "liu54420322",
   database: "cinema_booking",
 });
 
@@ -78,12 +78,12 @@ passport.use(
       var cellphone = req.body.cellphone;
       var favouriteType = req.body.favouriteType;
 
-      mysqldb.connect(function (err) {
+      pool.connect(function (err, connection) {
         if (err) throw err;
 
         var table = "user";
         var sql = `INSERT INTO ${table} (email, password, type, name, cellphone, favouriteType) VALUES ('${email}', '${password}', '${type}', '${name}', '${cellphone}', '${favouriteType}')`;
-        mysqldb.query(sql, function (err, user) {
+        connection.query(sql, function (err, user) {
           if (err) throw err;
           console.log("Register new user successfully!");
           return done(null, user);
@@ -94,9 +94,7 @@ passport.use(
 );
 
 //login用户名密码检验 并生成user用户 传到后续所有页面 相当于替代了原来的loginController的post功能
-passport.use(
-  "login",
-  new LocalStrategy(
+passport.use("login", new LocalStrategy(
     {
       usernameField: "username",
       passwordField: "password",
@@ -105,6 +103,7 @@ passport.use(
     function (req, username, password, done) {
       var name = req.body.username;
       var password = req.body.password;
+      console.log("password", password);
 
       //数据库检验密码用户名真伪，如果密码;相等 就调用done函数 进入下一层
       pool.getConnection(function (err, connection) {
