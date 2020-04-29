@@ -5,7 +5,7 @@ var mysql = require("mysql");
 var pool = mysql.createPool({
   host: "localhost",
   user: "root",
-  password: "Mb2047809!!",
+  password: "liu54420322",
   database: "cinema_booking", // schema name
 });
 

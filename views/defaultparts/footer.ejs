@@ -1,21 +1,23 @@
 <footer>
-  <div>
-    <% if (user != "none") { %>
-    <a href="/edituser">Edit Account</a> -
-    <a href="/ratings">Rating on Movies </a> -
-    <a href="/search">Search Movies</a><br />
-    <% } %> <% if (user.name == "admin") { %>
-    <a href="/deleteuser">Delete User</a> - <a href="/showuser">Show Users</a
-    ><br />
+    <div>
+        <% if (user != "none") { %>
+            <a href="/edituser">Edit Account</a> -
+            <a href="/ratings">Rating on Movies </a>-
+            <a href="/search">Search Movies</a>-
+        <% } %>
+        <% if (user.name == "admin") { %>
+            <a href="/deleteuser">Delete User</a> -
+            <a href="/showuser">Show Users</a><br/>-
 
-    <a href="/addmovie">Add Movie</a> -
-    <a href="/deletemovie">Delete Movie</a> -
-    <a href="/editmovie">Edit Movie</a> - <a href="/showmovie">Show Movie</a
-    ><br />
+            <a href="/addmovie">Add Movie</a> -
+            <a href="/deletemovie">Delete Movie</a> -
+            <a href="/editmovie">Edit Movie</a> -
+            <a href="/showmovie">Show Movie</a><br/>-
 
-    <a href="/addnews">Add Ads</a> - <a href="/deletenews">Delete Ads</a> -
-    <a href="/editnews">Edit Ads</a><br />
-    <% } %>
-    <a href="/">HOMEPAGE</a>
-  </div>
+            <a href="/addnews">Add Ads</a> -
+            <a href="/deletenews">Delete Ads</a> -
+            <a href="/editnews">Edit Ads</a><br/>
+        <% } %>
+        <a href="/">HOMEPAGE</a>
+    </div>
 </footer>

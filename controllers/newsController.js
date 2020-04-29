@@ -7,7 +7,7 @@ var mysql = require("mysql");
 var pool = mysql.createPool({
   host: "localhost",
   user: "root",
-  password: "Mb2047809!!",
+  password: "liu54420322",
   database: "cinema_booking",
 });
 
@@ -72,25 +72,44 @@ exports.addnewsCRUD = function () {
     var title = req.body.title;
     var content = req.body.content;
 
-    /**
-     * 后端存入广告 title和content
-     */
+    pool.getConnection(function (err, connection) {
+      if (err) throw err;
 
-    res.location("/");
-    res.redirect("/");
+      var table = "advertisement";
+      var sql = `INSERT INTO ${table} (AdTitle, AdContent) VALUES ('${title}', '${content}')`;
+      connection.query(sql, function (err, user) {
+        if (err) {throw err};
+        connection.release()
+        res.location("/");
+        res.redirect("/");
+
+      });
+
+
+    });
+
+
   };
 };
 
 exports.deletenewsCRUD = function () {
   return function (req, res) {
     var title = req.body.title;
-    /**
-     * 后端根据title 删除该条广告
-     */
-    res.location("/");
-    res.redirect("/");
-  };
-};
+    pool.getConnection(function (err, connection) {
+      if (err) throw err;
+      var table = "advertisement";
+
+      var sqlDeleteNews = `DELETE FROM ${table} WHERE AdTitle = '${title}'`;
+
+      connection.query(sqlDeleteNews, function (err, result) {
+        if (err) throw err;
+      connection.release();
+      res.location("/");
+      res.redirect("/");
+    });
+
+  })
+}};
 
 exports.editnewsCRUD = function () {
   return function (req, res) {
@@ -98,10 +117,26 @@ exports.editnewsCRUD = function () {
     var newTitle = req.body.newtitle;
     var newContent = req.body.newcontent;
 
-    /**
-     * 根据title找到这条广告，并且存入新广告
-     */
-    res.location("/");
-    res.redirect("/");
+    pool.getConnection(function (err, connection) {
+      if (err) throw err;
+      var table = "advertisement";
+
+      var sqlDeleteNews = `DELETE FROM ${table} WHERE AdTitle = '${title}'`;
+
+      connection.query(sqlDeleteNews, function (err, result) {
+        if (err) throw err;
+
+      });
+      var sql = `INSERT INTO ${table} (AdTitle, AdContent) VALUES ('${newTitle}', '${newContent}')`;
+      connection.query(sql, function (err, user) {
+        if (err) {throw err};
+        connection.release()
+        res.location("/");
+        res.redirect("/");
+
+      });
+
+    })
+
   };
 };

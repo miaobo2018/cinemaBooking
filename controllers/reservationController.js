@@ -8,7 +8,7 @@ var mysql = require("mysql");
 var pool = mysql.createPool({
   host: "localhost",
   user: "root",
-  password: "Mb2047809!!",
+  password: "liu54420322",
   database: "cinema_booking", // schema name
 });
 
@@ -26,10 +26,12 @@ exports.getreservation = function (req, res) {
       connection.release();
       // console.log(movies);
       res.json({
-        seats: seats,
+        "seats": seats
       });
+
     });
   });
+
 };
 
 exports.getinformationaboutseat = function (req, res) {
@@ -51,21 +53,25 @@ exports.makeReservation = function (req, res) {
   var email = req.body.email;
   var phone = req.body.phone;
 
+
   pool.getConnection(function (err, connection) {
     if (err) throw err;
     //这里for循环一定要房子getConnection里面！！！！
-    for (var i = 0; i < seats.length; i++) {
-      var table = "booking"; // table name
+    for (var i = 0; i < seats.length;i++) {
+    var table = 'booking'; // table name
 
-      var sql = `INSERT INTO ${table} (username, filmname, day, startTime, seat) VALUES ('${name}', '${movieName}', '${movieDay}', '${movieHour}', '${seats[i]}')`;
-      connection.query(sql, function (err, result, fields) {
-        if (err) {
-          console.log(err);
-        } else {
-          console.log("Insert successfully!");
-        }
-      });
-    }
+
+    var sql = `INSERT INTO ${table} (username, filmname, day, startTime, seat) VALUES ('${name}', '${movieName}', '${movieDay}', '${movieHour}', '${seats[i]}')`;
+    connection.query(sql, function (err, result, fields) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log("Insert successfully!")
+      }
+      ;
+
+    });
+  };
     connection.release();
-  });
+})
 };

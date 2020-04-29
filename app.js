@@ -17,7 +17,7 @@ var mysql = require("mysql");
 var pool = mysql.createPool({
   host: "localhost",
   user: "root",
-  password: "Mb2047809!!",
+  password: "liu54420322",
   database: "cinema_booking",
 });
 
@@ -78,25 +78,29 @@ passport.use(
       var cellphone = req.body.cellphone;
       var favouriteType = req.body.favouriteType;
 
-      pool.connect(function (err, connection) {
+      pool.getConnection(function (err, connection) {
         if (err) throw err;
 
         var table = "user";
         var sql = `INSERT INTO ${table} (email, password, type, name, cellphone, favouriteType) VALUES ('${email}', '${password}', '${type}', '${name}', '${cellphone}', '${favouriteType}')`;
         connection.query(sql, function (err, user) {
-          if (err) throw err;
-          console.log("Register new user successfully!");
-          return done(null, user);
+          if (err) {throw err}
+          else {      console.log("Register new user successfully!");}
+
+
         });
+        sql = `SELECT * FROM ${table} WHERE name = '${name}'`;
+        connection.query(sql, function(err, users){
+          var user = users[0];
+          return done(null, user);
+        })
       });
     }
   )
 );
 
 //login用户名密码检验 并生成user用户 传到后续所有页面 相当于替代了原来的loginController的post功能
-passport.use(
-  "login",
-  new LocalStrategy(
+passport.use("login", new LocalStrategy(
     {
       usernameField: "username",
       passwordField: "password",
@@ -118,8 +122,8 @@ passport.use(
           console.log("users", users);
           connection.release();
           var user = users[0];
-          //if (passwordHash.verify(password, user.password)){ 当储存的密码是哈希值时 取消注释 因为当前数据库密码都是真实值 所以暂时用真实值比较 后续完成后更改数据库密码统一变成哈希值
-          if (password === user.password) {
+          if (passwordHash.verify(password, user.password)){ //输入密码哈希化并对比
+
             return done(null, user);
           }
         });
@@ -179,19 +183,9 @@ app.post(
     failureFlash: true,
   })
 );
-
-// get logout
-app.get("/logout", function (req, res, next) {
-  if (req.session) {
-    // delete session object
-    req.session.destroy(function (err) {
-      if (err) {
-        return next(err);
-      } else {
-        return res.redirect("/");
-      }
-    });
-  }
+app.get('/logout', function(req, res) {
+  req.logout();
+  res.redirect('/');
 });
 
 function isLoggedAdminIn(req, res, next) {

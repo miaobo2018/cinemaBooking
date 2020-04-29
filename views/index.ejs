@@ -30,13 +30,13 @@
 
       <% } if (action == 'showuser') { %>
         <div style="color: #FFF; font-size: 22px;">User data:</div>
+              <div>UserName    Password    Email    Cellphone </div>
         <% for(var i=0; i<returnList.length; i++) { %>
           <div>
-            <%= returnList[i].username %>
-            <%= returnList[i].password %>
             <%= returnList[i].name %>
+            <%= returnList[i].password %>
             <%= returnList[i].email %>
-            <%= returnList[i].phone %>
+            <%= returnList[i].cellphone %>
           </div>
         <% }%>
 
@@ -119,6 +119,9 @@
 
       <% } %>
     <% if (action == "show_search_result") {%>
+        <% if (returnList.length == 0) { %>
+            <h3> The film you searched is not existed.</h3>
+                <% } else {%>
      <div>
       <div><label>Film Name</label>
         <label> Screening Day</label>
@@ -137,7 +140,7 @@
           </div>
       <% } %>
 </div>
-      <%} %>
+      <%} }%>
 
 
   </main>

@@ -3,7 +3,7 @@ var mysql = require("mysql");
 var pool = mysql.createPool({
   host: "localhost",
   user: "root",
-  password: "Mb2047809!!",
+  password: "liu54420322",
   database: "cinema_booking", // schema name
 });
 exports.addmovie = function () {
@@ -83,6 +83,8 @@ exports.addmovieCRUD = function () {
     var hallNumber = req.body.hall;
     var days = req.body.day;
     var hours = req.body.hour;
+    console.log("days", days);
+    console.log("hours", hours);
     /**
      * 需要后端保存新的电影 hall就是room 注意这里的days可能是单个日期 也可能是一个日期数组 hours同理 写入后端的时候要分情况
      * 考虑
@@ -92,7 +94,7 @@ exports.addmovieCRUD = function () {
       var table1 = "film";
       var table2 = "screening";
       // insert into film table
-      var sqlInsertFilm = `INSERT INTO ${table1} (filmName, type, length, price) VALUES ('${movieName}', '${movieType}', ${movieLength}, ${moviePrice})`;
+      var sqlInsertFilm = `INSERT INTO ${table1} (filmName, type, length, price) VALUES ('${movieName}', '${movieType}', '${movieLength}', '${moviePrice}')`;
       mysqldb.query(sqlInsertFilm, function (err, result) {
         if (err) throw err;
         console.log("New Film Inserted");
@@ -104,10 +106,13 @@ exports.addmovieCRUD = function () {
           newFilmId = result[0].filmId;
           console.log(newFilmId);
           // insert into screening table
-          for (var i = 0; i < days.length; i++) {
-            var day = days[i];
-            for (var j = 0; j < hours.length; j++) {
-              var hour = hours[j];
+          var firstLoop = days.constructor === Array ? days.length : 1;
+          var secondLoop = hours.constructor === Array ? hours.length : 1;
+
+          for (var i = 0; i < firstLoop; i++) {
+            for (var j = 0; j < secondLoop; j++) {
+              var day = days.constructor === Array ? days[i] : days;
+              var hour = hours.constructor === Array ? hours[j] : hours;
               var sqlInsertScreening = `INSERT INTO ${table2} (day, startTime, sfilmId, name, sfilmPrice, room) VALUES ('${day}', '${hour}', ${newFilmId}, '${movieName}', ${moviePrice}, ${hallNumber})`;
               mysqldb.query(sqlInsertScreening, function (err, result) {
                 if (err) throw err;
@@ -197,20 +202,30 @@ exports.editmovieCRUD = function () {
               if (err) throw err;
               newFilmId = result[0].filmId;
               console.log(newFilmId);
-              // insert into screening table
-              var sqlInsertScreening = `INSERT INTO ${table2} (day, startTime, sfilmId, name, sfilmPrice, room) VALUES ('${dayNew}', '${hourNew}', ${newFilmId}, '${movieNameNew}', ${moviePrice}, ${hallNumberNew})`;
-              mysqldb.query(sqlInsertScreening, function (err, result) {
-                if (err) throw err;
-                console.log("New Screening Inserted");
-              });
-              pool.releaseConnection(mysqldb);
-              res.location("showmovie");
-              res.redirect("showmovie");
+              var firstLoop = dayNew.constructor === Array ? dayNew.length : 1;
+              var secondLoop = hourNew.constructor === Array ? hourNew.length : 1;
+
+              for (var i = 0; i < firstLoop; i++) {
+                for (var j = 0; j < secondLoop; j++) {
+                  var day = dayNew.constructor === Array ? dayNew[i] : dayNew;
+                  var hour = hourNew.constructor === Array ? hourNew[j] : hourNew;
+                  var sqlInsertScreening = `INSERT INTO ${table2} (day, startTime, sfilmId, name, sfilmPrice, room) VALUES ('${day}', '${hour}', ${newFilmId}, '${movieNameNew}', ${moviePrice}, ${hallNumberNew})`;
+                  mysqldb.query(sqlInsertScreening, function (err, result) {
+                    if (err) throw err;
+
+  
+                  });
+                }
+              }
+
             });
           });
           // insert block end
         });
-      });
+        pool.releaseConnection(mysqldb);
+        console.log("New Screening Inserted");
+        res.location("showmovie");
+        res.redirect("showmovie");});
     });
   };
 };
@@ -238,9 +253,9 @@ exports.searchMovies = function () {
       var sql = `SELECT name, day, startTime, sfilmPrice, room from ${table} WHERE name = '${movieName}';`;
       connection.query(sql, function (err, result) {
         if (err) throw err;
-        console.log("successfully query screening table");
-        console.log(result);
-
+        // console.log("successfully query screening table");
+        // console.log(result);
+        connection.release();
         res.render("index", {
           title: "Search Results",
           user: req.user == undefined ? "none" : req.user,
@@ -324,8 +339,10 @@ exports.getPrice = function (req, res) {
       connection.release();
       // console.log(movies);
       res.json({
-        price: price,
+        "price": price
       });
+
     });
   });
+
 };
