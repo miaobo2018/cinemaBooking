@@ -17,7 +17,7 @@ var mysql = require("mysql");
 var pool = mysql.createPool({
   host: "localhost",
   user: "root",
-  password: "liu54420322",
+  password: "Mb2047809!!",
   database: "cinema_booking",
 });
 
@@ -84,23 +84,26 @@ passport.use(
         var table = "user";
         var sql = `INSERT INTO ${table} (email, password, type, name, cellphone, favouriteType) VALUES ('${email}', '${password}', '${type}', '${name}', '${cellphone}', '${favouriteType}')`;
         connection.query(sql, function (err, user) {
-          if (err) {throw err}
-          else {      console.log("Register new user successfully!");}
-
-
+          if (err) {
+            throw err;
+          } else {
+            console.log("Register new user successfully!");
+          }
         });
         sql = `SELECT * FROM ${table} WHERE name = '${name}'`;
-        connection.query(sql, function(err, users){
+        connection.query(sql, function (err, users) {
           var user = users[0];
           return done(null, user);
-        })
+        });
       });
     }
   )
 );
 
 //login用户名密码检验 并生成user用户 传到后续所有页面 相当于替代了原来的loginController的post功能
-passport.use("login", new LocalStrategy(
+passport.use(
+  "login",
+  new LocalStrategy(
     {
       usernameField: "username",
       passwordField: "password",
@@ -122,7 +125,8 @@ passport.use("login", new LocalStrategy(
           console.log("users", users);
           connection.release();
           var user = users[0];
-          if (passwordHash.verify(password, user.password)){ //输入密码哈希化并对比
+          if (passwordHash.verify(password, user.password)) {
+            //输入密码哈希化并对比
 
             return done(null, user);
           }
@@ -183,9 +187,9 @@ app.post(
     failureFlash: true,
   })
 );
-app.get('/logout', function(req, res) {
+app.get("/logout", function (req, res) {
   req.logout();
-  res.redirect('/');
+  res.redirect("/");
 });
 
 function isLoggedAdminIn(req, res, next) {

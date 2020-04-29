@@ -7,7 +7,7 @@ var mysql = require("mysql");
 var pool = mysql.createPool({
   host: "localhost",
   user: "root",
-  password: "liu54420322",
+  password: "Mb2047809!!",
   database: "cinema_booking",
 });
 
@@ -78,17 +78,14 @@ exports.addnewsCRUD = function () {
       var table = "advertisement";
       var sql = `INSERT INTO ${table} (AdTitle, AdContent) VALUES ('${title}', '${content}')`;
       connection.query(sql, function (err, user) {
-        if (err) {throw err};
-        connection.release()
+        if (err) {
+          throw err;
+        }
+        connection.release();
         res.location("/");
         res.redirect("/");
-
       });
-
-
     });
-
-
   };
 };
 
@@ -103,13 +100,13 @@ exports.deletenewsCRUD = function () {
 
       connection.query(sqlDeleteNews, function (err, result) {
         if (err) throw err;
-      connection.release();
-      res.location("/");
-      res.redirect("/");
+        connection.release();
+        res.location("/");
+        res.redirect("/");
+      });
     });
-
-  })
-}};
+  };
+};
 
 exports.editnewsCRUD = function () {
   return function (req, res) {
@@ -125,18 +122,16 @@ exports.editnewsCRUD = function () {
 
       connection.query(sqlDeleteNews, function (err, result) {
         if (err) throw err;
-
       });
       var sql = `INSERT INTO ${table} (AdTitle, AdContent) VALUES ('${newTitle}', '${newContent}')`;
       connection.query(sql, function (err, user) {
-        if (err) {throw err};
-        connection.release()
+        if (err) {
+          throw err;
+        }
+        connection.release();
         res.location("/");
         res.redirect("/");
-
       });
-
-    })
-
+    });
   };
 };

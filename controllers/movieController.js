@@ -3,7 +3,7 @@ var mysql = require("mysql");
 var pool = mysql.createPool({
   host: "localhost",
   user: "root",
-  password: "liu54420322",
+  password: "Mb2047809!!",
   database: "cinema_booking", // schema name
 });
 exports.addmovie = function () {
@@ -203,21 +203,20 @@ exports.editmovieCRUD = function () {
               newFilmId = result[0].filmId;
               console.log(newFilmId);
               var firstLoop = dayNew.constructor === Array ? dayNew.length : 1;
-              var secondLoop = hourNew.constructor === Array ? hourNew.length : 1;
+              var secondLoop =
+                hourNew.constructor === Array ? hourNew.length : 1;
 
               for (var i = 0; i < firstLoop; i++) {
                 for (var j = 0; j < secondLoop; j++) {
                   var day = dayNew.constructor === Array ? dayNew[i] : dayNew;
-                  var hour = hourNew.constructor === Array ? hourNew[j] : hourNew;
+                  var hour =
+                    hourNew.constructor === Array ? hourNew[j] : hourNew;
                   var sqlInsertScreening = `INSERT INTO ${table2} (day, startTime, sfilmId, name, sfilmPrice, room) VALUES ('${day}', '${hour}', ${newFilmId}, '${movieNameNew}', ${moviePrice}, ${hallNumberNew})`;
                   mysqldb.query(sqlInsertScreening, function (err, result) {
                     if (err) throw err;
-
-  
                   });
                 }
               }
-
             });
           });
           // insert block end
@@ -225,7 +224,8 @@ exports.editmovieCRUD = function () {
         pool.releaseConnection(mysqldb);
         console.log("New Screening Inserted");
         res.location("showmovie");
-        res.redirect("showmovie");});
+        res.redirect("showmovie");
+      });
     });
   };
 };
@@ -339,10 +339,8 @@ exports.getPrice = function (req, res) {
       connection.release();
       // console.log(movies);
       res.json({
-        "price": price
+        price: price,
       });
-
     });
   });
-
 };
