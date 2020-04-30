@@ -6,6 +6,11 @@ var pool = mysql.createPool({
   password: "Mb2047809!!",
   database: "cinema_booking", // schema name
 });
+
+// logger
+var log4js = require("log4js");
+const logger = log4js.getLogger();
+
 exports.addmovie = function () {
   return function (req, res) {
     res.render("index", {
@@ -58,9 +63,10 @@ exports.showmovieCRUD = function () {
       var sql = `SELECT * FROM ${table}`;
 
       mysqldb.query(sql, function (err, result, fields) {
+        logger.info("SQL Query: ", sql);
+        logger.info("SQL Result: ", result);
         if (err) throw err;
         movies = result;
-        // console.log(movies);
         res.render("index", {
           title: "Show movies",
           user: req.user == undefined ? "none" : req.user,
@@ -83,8 +89,6 @@ exports.addmovieCRUD = function () {
     var hallNumber = req.body.hall;
     var days = req.body.day;
     var hours = req.body.hour;
-    console.log("days", days);
-    console.log("hours", hours);
     /**
      * 需要后端保存新的电影 hall就是room 注意这里的days可能是单个日期 也可能是一个日期数组 hours同理 写入后端的时候要分情况
      * 考虑
@@ -96,12 +100,15 @@ exports.addmovieCRUD = function () {
       // insert into film table
       var sqlInsertFilm = `INSERT INTO ${table1} (filmName, type, length, price) VALUES ('${movieName}', '${movieType}', '${movieLength}', '${moviePrice}')`;
       mysqldb.query(sqlInsertFilm, function (err, result) {
+        logger.info("SQL Query: ", sqlInsertFilm);
+        logger.info("SQL Result: ", result);
         if (err) throw err;
-        console.log("New Film Inserted");
         var sqlSelectFilmId = `SELECT filmId FROM ${table1} WHERE filmName = '${movieName}'`;
         var newFilmId = 0;
         // get the newFilmId
         mysqldb.query(sqlSelectFilmId, function (err, result, fields) {
+          logger.info("SQL Query: ", sqlSelectFilmId);
+          logger.info("SQL Result: ", result);
           if (err) throw err;
           newFilmId = result[0].filmId;
           console.log(newFilmId);
@@ -115,6 +122,8 @@ exports.addmovieCRUD = function () {
               var hour = hours.constructor === Array ? hours[j] : hours;
               var sqlInsertScreening = `INSERT INTO ${table2} (day, startTime, sfilmId, name, sfilmPrice, room) VALUES ('${day}', '${hour}', ${newFilmId}, '${movieName}', ${moviePrice}, ${hallNumber})`;
               mysqldb.query(sqlInsertScreening, function (err, result) {
+                logger.info("SQL Query: ", sqlInsertScreening);
+                logger.info("SQL Result: ", result);
                 if (err) throw err;
                 console.log("New Screening Inserted");
               });
@@ -183,22 +192,30 @@ exports.editmovieCRUD = function () {
       var sqlDeleteFilm = `DELETE FROM ${table1} WHERE filmName = '${movieName}'`;
       var sqlDeleteScreening = `DELETE FROM ${table2} WHERE name = '${movieName}'`;
       mysqldb.query(sqlDeleteScreening, function (err, result) {
+        logger.info("SQL Query: ", sqlDeleteScreening);
+        logger.info("SQL Result: ", result);
         if (err) throw err;
         console.log("Target Film Deleted in Screening Table");
         // delete in film table
         mysqldb.query(sqlDeleteFilm, function (err, result) {
+          logger.info("SQL Query: ", sqlDeleteFilm);
+          logger.info("SQL Result: ", result);
           if (err) throw err;
           console.log("Target Film Deleted in Film Table");
           // insert block begin
           // insert into film table
           var sqlInsertFilm = `INSERT INTO ${table1} (filmName, type, length, price) VALUES ('${movieNameNew}', '${movieType}', ${movieLength}, ${moviePrice})`;
           mysqldb.query(sqlInsertFilm, function (err, result) {
+            logger.info("SQL Query: ", sqlInsertFilm);
+            logger.info("SQL Result: ", result);
             if (err) throw err;
             console.log("New Film Inserted");
             var sqlSelectFilmId = `SELECT filmId FROM ${table1} WHERE filmName = '${movieNameNew}'`;
             var newFilmId = 0;
             // get the newFilmId
             mysqldb.query(sqlSelectFilmId, function (err, result, fields) {
+              logger.info("SQL Query: ", sqlSelectFilmId);
+              logger.info("SQL Result: ", result);
               if (err) throw err;
               newFilmId = result[0].filmId;
               console.log(newFilmId);
@@ -213,6 +230,8 @@ exports.editmovieCRUD = function () {
                     hourNew.constructor === Array ? hourNew[j] : hourNew;
                   var sqlInsertScreening = `INSERT INTO ${table2} (day, startTime, sfilmId, name, sfilmPrice, room) VALUES ('${day}', '${hour}', ${newFilmId}, '${movieNameNew}', ${moviePrice}, ${hallNumberNew})`;
                   mysqldb.query(sqlInsertScreening, function (err, result) {
+                    logger.info("SQL Query: ", sqlInsertScreening);
+                    logger.info("SQL Result: ", result);
                     if (err) throw err;
                   });
                 }
@@ -222,7 +241,7 @@ exports.editmovieCRUD = function () {
           // insert block end
         });
         pool.releaseConnection(mysqldb);
-        console.log("New Screening Inserted");
+        // console.log("New Screening Inserted");
         res.location("showmovie");
         res.redirect("showmovie");
       });
@@ -252,6 +271,8 @@ exports.searchMovies = function () {
       var table = "screening"; // table name
       var sql = `SELECT name, day, startTime, sfilmPrice, room from ${table} WHERE name = '${movieName}';`;
       connection.query(sql, function (err, result) {
+        logger.info("SQL Query: ", sql);
+        logger.info("SQL Result: ", result);
         if (err) throw err;
         // console.log("successfully query screening table");
         // console.log(result);
@@ -277,6 +298,8 @@ exports.getmovies = function (req, res) {
     var sql = `SELECT filmName FROM ${table} `;
 
     connection.query(sql, function (err, movies, fields) {
+      logger.info("SQL Query: ", sql);
+      logger.info("SQL Result: ", movies);
       connection.release();
       // console.log(movies);
       res.json({
@@ -296,6 +319,8 @@ exports.getdays = function (req, res) {
     var sql = `SELECT day, room FROM ${table} WHERE name = '${movieName}' `;
 
     connection.query(sql, function (err, days, fields) {
+      logger.info("SQL Query: ", sql);
+      logger.info("SQL Result: ", days);
       connection.release();
       // console.log(movies);
       res.json({
@@ -315,6 +340,8 @@ exports.gethours = function (req, res) {
     var sql = `SELECT startTime FROM ${table} WHERE name = '${movieName}' and Day = '${movieDay}' `;
 
     connection.query(sql, function (err, startTimes, fields) {
+      logger.info("SQL Query: ", sql);
+      logger.info("SQL Result: ", startTimes);
       connection.release();
       // console.log(movies);
       res.json({
@@ -336,6 +363,8 @@ exports.getPrice = function (req, res) {
     var sql = `SELECT sfilmPrice FROM ${table} WHERE name = '${movieName}' and day = '${movieDay}' and startTime = '${movieHour}'`;
 
     connection.query(sql, function (err, price, fields) {
+      logger.info("SQL Query: ", sql);
+      logger.info("SQL Result: ", price);
       connection.release();
       // console.log(movies);
       res.json({

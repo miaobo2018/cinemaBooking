@@ -11,6 +11,10 @@ var pool = mysql.createPool({
   database: "cinema_booking",
 });
 
+// logger
+var log4js = require("log4js");
+const logger = log4js.getLogger();
+
 exports.shownewsCRUD = function () {
   return function (req, res) {
     pool.getConnection(function (err, connection) {
@@ -20,6 +24,8 @@ exports.shownewsCRUD = function () {
       var sql = `SELECT * FROM ${table} `;
 
       connection.query(sql, function (err, news, fields) {
+        logger.info("SQL Query: ", sql);
+        logger.info("SQL Result: ", news);
         // console.log("news", news);
         connection.release();
         res.json({
@@ -78,6 +84,8 @@ exports.addnewsCRUD = function () {
       var table = "advertisement";
       var sql = `INSERT INTO ${table} (AdTitle, AdContent) VALUES ('${title}', '${content}')`;
       connection.query(sql, function (err, user) {
+        logger.info("SQL Query: ", sql);
+        logger.info("SQL Result: ", user);
         if (err) {
           throw err;
         }
@@ -99,6 +107,8 @@ exports.deletenewsCRUD = function () {
       var sqlDeleteNews = `DELETE FROM ${table} WHERE AdTitle = '${title}'`;
 
       connection.query(sqlDeleteNews, function (err, result) {
+        logger.info("SQL Query: ", sqlDeleteNews);
+        logger.info("SQL Result: ", result);
         if (err) throw err;
         connection.release();
         res.location("/");
@@ -125,6 +135,8 @@ exports.editnewsCRUD = function () {
       });
       var sql = `INSERT INTO ${table} (AdTitle, AdContent) VALUES ('${newTitle}', '${newContent}')`;
       connection.query(sql, function (err, user) {
+        logger.info("SQL Query: ", sql);
+        logger.info("SQL Result: ", user);
         if (err) {
           throw err;
         }

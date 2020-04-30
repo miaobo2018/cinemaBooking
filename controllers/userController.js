@@ -9,7 +9,9 @@ var pool = mysql.createPool({
   database: "cinema_booking", // schema name
 });
 
-var async = require("async");
+// logger
+var log4js = require("log4js");
+const logger = log4js.getLogger();
 
 exports.showuser = function () {
   return function (req, res) {
@@ -26,6 +28,8 @@ exports.showuser = function () {
       mysqldb.query(sql, function (err, result, fields) {
         if (err) throw err;
         users = result;
+        logger.info("SQL Query: ", sql);
+        logger.info("SQL Result: ", users);
         res.render("index", {
           title: "Show users",
           user: req.user == undefined ? "none" : req.user,
@@ -77,8 +81,9 @@ exports.deleteuserCRUD = function () {
       var table = "user"; // table name
       var sql = `DELETE FROM ${table} WHERE name = '${username}'`;
       mysqldb.query(sql, function (err, result) {
+        logger.info("SQL Query: ", sql);
+        logger.info("SQL Result: ", result);
         if (err) throw err;
-        console.log("Delete Finished");
       });
       pool.releaseConnection(mysqldb);
       res.redirect("showuser");
@@ -102,12 +107,12 @@ exports.edituserCRUD = function () {
       var table = "user"; // table name
       var sql = `UPDATE ${table} SET favouriteType = '${FavouriteTypeNew}', email = '${EmailNew}', cellphone = '${PhoneNew}' WHERE name = '${username}'`;
       mysqldb.query(sql, function (err, result) {
+        logger.info("SQL Query: ", sql);
+        logger.info("SQL Result: ", result);
         if (err) throw err;
-        console.log("Update Finished");
       });
       pool.releaseConnection(mysqldb);
     });
-
     res.redirect("showuser");
   };
 };

@@ -25,7 +25,8 @@ module.exports.post_userlogin = function (req, res) {
       for (i = 0; i < result.length; i++) {
         if (name === result[i].name && password === result[i].password) {
           // Login Success -> Dashborad Page
-          console.log("Success");
+          console.log("console login");
+
           return res.render("index", {
             title: "Reservation",
             user: req.user == undefined ? "none" : req.user,

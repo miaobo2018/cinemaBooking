@@ -21,6 +21,31 @@ var pool = mysql.createPool({
   database: "cinema_booking",
 });
 
+// logger
+var log4js = require("log4js");
+log4js.configure({
+  appenders: {
+    fileAppender: {
+      type: "DateFile",
+      filename: "./logs/httpAndDatabase",
+      pattern: "yyyy-MM-dd.log",
+      alwaysIncludePattern: true,
+      category: "access",
+    },
+    console: { type: "console" },
+  },
+  categories: {
+    default: { appenders: ["fileAppender", "console"], level: "info" },
+  },
+});
+app.use(
+  log4js.connectLogger(log4js.getLogger("access"), {
+    level: log4js.levels.INFO,
+  })
+);
+const logger = log4js.getLogger();
+// logger end
+
 const users = require("./controllers/userController.js");
 const movies = require("./controllers/movieController.js");
 const reservations = require("./controllers/reservationController.js");
@@ -52,6 +77,8 @@ passport.deserializeUser(function (name, done) {
     var table = "user"; // table name
     var sql = `SELECT * FROM ${table} where user.name = '${name}'`;
     connection.query(sql, function (err, users, fields) {
+      logger.info("SQL Query: ", sql);
+      logger.info("SQL Result: ", users);
       connection.release();
       if (err) throw err;
       var user = users[0];
@@ -84,6 +111,8 @@ passport.use(
         var table = "user";
         var sql = `INSERT INTO ${table} (email, password, type, name, cellphone, favouriteType) VALUES ('${email}', '${password}', '${type}', '${name}', '${cellphone}', '${favouriteType}')`;
         connection.query(sql, function (err, user) {
+          logger.info("SQL Query: ", sql);
+          logger.info("SQL Result: ", user);
           if (err) {
             throw err;
           } else {
@@ -92,6 +121,8 @@ passport.use(
         });
         sql = `SELECT * FROM ${table} WHERE name = '${name}'`;
         connection.query(sql, function (err, users) {
+          logger.info("SQL Query: ", sql);
+          logger.info("SQL Result: ", users);
           var user = users[0];
           return done(null, user);
         });
@@ -122,7 +153,8 @@ passport.use(
         var sql = `SELECT name, password FROM ${table} WHERE name = '${name}'`;
 
         connection.query(sql, function (err, users, fields) {
-          console.log("users", users);
+          logger.info("SQL Query: ", sql);
+          logger.info("SQL Result: ", users);
           connection.release();
           var user = users[0];
           if (passwordHash.verify(password, user.password)) {

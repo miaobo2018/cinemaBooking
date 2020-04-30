@@ -12,6 +12,10 @@ var pool = mysql.createPool({
   database: "cinema_booking", // schema name
 });
 
+// logger
+var log4js = require("log4js");
+const logger = log4js.getLogger();
+
 exports.getreservation = function (req, res) {
   var movieName = req.body.movieName;
   var movieDay = req.body.movieDay;
@@ -23,6 +27,8 @@ exports.getreservation = function (req, res) {
     var sql = `SELECT seat FROM ${table} WHERE filmname = '${movieName}' and day = '${movieDay}' and startTime = '${movieHour}'`;
 
     connection.query(sql, function (err, seats, fields) {
+      logger.info("SQL Query: ", sql);
+      logger.info("SQL Result: ", seats);
       connection.release();
       // console.log(movies);
       res.json({
@@ -59,10 +65,11 @@ exports.makeReservation = function (req, res) {
 
       var sql = `INSERT INTO ${table} (username, filmname, day, startTime, seat) VALUES ('${name}', '${movieName}', '${movieDay}', '${movieHour}', '${seats[i]}')`;
       connection.query(sql, function (err, result, fields) {
+        logger.info("SQL Query: ", sql);
         if (err) {
           console.log(err);
         } else {
-          console.log("Insert successfully!");
+          logger.info("SQL Result: ", result);
         }
       });
     }
