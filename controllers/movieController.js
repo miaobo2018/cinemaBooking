@@ -3,7 +3,7 @@ var mysql = require("mysql");
 var pool = mysql.createPool({
   host: "localhost",
   user: "root",
-  password: "Mb2047809!!",
+  password: "liu54420322",
   database: "cinema_booking", // schema name
 });
 
@@ -79,6 +79,14 @@ exports.showmovieCRUD = function () {
     });
   };
 };
+// var connection = mysql.createConnection(
+//     {
+//       host     : 'localhost',
+//       user     : 'YOUR_USERNAME',
+//       password : 'YOUR_PASSWORD',
+//       database : 'DB_NAME'
+//     }
+// );
 
 exports.addmovieCRUD = function () {
   return function (req, res) {
@@ -99,7 +107,14 @@ exports.addmovieCRUD = function () {
       var table2 = "screening";
       // insert into film table
       var sqlInsertFilm = `INSERT INTO ${table1} (filmName, type, length, price) VALUES ('${movieName}', '${movieType}', '${movieLength}', '${moviePrice}')`;
+      mysqldb.beginTransaction(function(err){
+        if (err){throw err;}
       mysqldb.query(sqlInsertFilm, function (err, result) {
+        if (err){
+          mysqldb.rollback(function(){
+            throw err;
+          });
+        }
         logger.info("SQL Query: ", sqlInsertFilm);
         logger.info("SQL Result: ", result);
         if (err) throw err;
@@ -109,7 +124,11 @@ exports.addmovieCRUD = function () {
         mysqldb.query(sqlSelectFilmId, function (err, result, fields) {
           logger.info("SQL Query: ", sqlSelectFilmId);
           logger.info("SQL Result: ", result);
-          if (err) throw err;
+          if (err){
+            mysqldb.rollback(function(){
+              throw err;
+            });
+          }
           newFilmId = result[0].filmId;
           console.log(newFilmId);
           // insert into screening table
@@ -124,16 +143,31 @@ exports.addmovieCRUD = function () {
               mysqldb.query(sqlInsertScreening, function (err, result) {
                 logger.info("SQL Query: ", sqlInsertScreening);
                 logger.info("SQL Result: ", result);
-                if (err) throw err;
+                if (err){
+                  mysqldb.rollback(function(){
+                    throw err;
+                  });
+                }
                 console.log("New Screening Inserted");
               });
             }
           }
+          mysqldb.commit(function(err){
+            if (err){
+              connection.rollback(function(){
+                throw err;
+              })
+            }
+            console.log('Transaction Complete.');
+          })
         });
       });
+
+    })
       pool.releaseConnection(mysqldb);
       res.location("showmovie");
       res.redirect("showmovie");
+
     });
   };
 };

@@ -258,9 +258,10 @@ $(document).ready(function () {
       },
       success: function (data) {
         $("#price").empty();
-        $("#price").val("");
-
-        $("#price").val(data.price[0].sfilmPrice);
+        $("#price").html("");
+        // var price  = document.getElementById("price"); JS 写法
+        // price.innerText = data.price[0].sfilmPrice;
+        $("#price").html(data.price[0].sfilmPrice); // JQuery 写法
 
 
 
@@ -521,6 +522,7 @@ $(document).ready(function () {
       seats = seats.filter((seat) => seat != thisValue);
 
       clickedSeat = --clickedSeat;
+      checkSummation();
       if (clickedSeat == 0) {
         $("#detail").slideUp(300);
         $("#summation").slideUp(300);
@@ -559,7 +561,7 @@ $(document).ready(function () {
       nValidation &&
       sValidation &&
       eValidation &&
-      pValidation
+      pValidation && clickedSeat == numberSeatsToReservation
     ) {
       $("#summation").css("background-color", "#30d5c8");
       $("#summation").css("color", "#FFF");
@@ -598,7 +600,7 @@ $(document).ready(function () {
       nValidation &&
       sValidation &&
       eValidation &&
-      pValidation
+      pValidation && clickedSeat == numberSeatsToReservation
     ) {
       $("#summation").css("background-color", "#30d5c8");
       $("#summation").css("color", "#FFF");
@@ -617,7 +619,7 @@ $(document).ready(function () {
       !nValidation ||
       !sValidation ||
       !eValidation ||
-      !pValidation
+      !pValidation || clickedSeat != numberSeatsToReservation
     ) {
       $("#summationList").slideUp(200);
       $("#finishReservation").slideUp(200);
@@ -654,6 +656,7 @@ $(document).ready(function () {
       );
     } else {
       alert("the number of selected seats doesn't match the set value! ");
+      return;
     }
     checkFinishReservation();
   }
@@ -680,7 +683,7 @@ $(document).ready(function () {
       nValidation &&
       sValidation &&
       eValidation &&
-      pValidation
+      pValidation && clickedSeat == numberSeatsToReservation
     ) {
       $("#finishReservation").css("background-color", "#30d5c8");
       $("#finishReservation").css("color", "#FFF");
