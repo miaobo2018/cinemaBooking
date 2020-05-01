@@ -1,3 +1,4 @@
+
 const bodyParser = require("body-parser");
 const express = require("express");
 const app = express();
@@ -67,6 +68,13 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 
+app.use(function(req,res,next){
+
+  res.locals.error = req.flash("error");
+  res.locals.success = req.flash("success");
+  next();
+});
+
 // 采用本地passport策略， 并在session层持久化
 var LocalStrategy = require("passport-local").Strategy;
 passport.serializeUser(function (user, done) {
@@ -109,9 +117,16 @@ passport.use(
         if (err) throw err;
 
         var table = "user";
-        var sql = `INSERT INTO ${table} (email, password, type, name, cellphone, favouriteType) VALUES ('${email}', '${password}', '${type}', '${name}', '${cellphone}', '${favouriteType}')`;
-        connection.query(sql, function (err, user) {
-          logger.info("SQL Query: ", sql);
+        var sql1 = `SELECT name  FROM ${table} WHERE name = '${name}'`;
+        connection.query(sql1,function(err, user){
+          if (user){
+
+            return done(null, false, req.flash('signupMsg', 'The username is already existed!'))
+          }
+        })
+        var sql2= `INSERT INTO ${table} (email, password, type, name, cellphone, favouriteType) VALUES ('${email}', '${password}', '${type}', '${name}', '${cellphone}', '${favouriteType}')`;
+        connection.query(sql2, function (err, user) {
+          logger.info("SQL Query: ", sql2);
           logger.info("SQL Result: ", user);
           if (err) {
             throw err;
@@ -119,9 +134,9 @@ passport.use(
             console.log("Register new user successfully!");
           }
         });
-        sql = `SELECT * FROM ${table} WHERE name = '${name}'`;
-        connection.query(sql, function (err, users) {
-          logger.info("SQL Query: ", sql);
+        sql2 = `SELECT * FROM ${table} WHERE name = '${name}'`;
+        connection.query(sql2, function (err, users) {
+          logger.info("SQL Query: ", sql2);
           logger.info("SQL Result: ", users);
           var user = users[0];
           return done(null, user);
@@ -157,10 +172,18 @@ passport.use(
           logger.info("SQL Result: ", users);
           connection.release();
           var user = users[0];
+          if (!user){
+            req.flash('error',"The username is not existed!");
+            return done(null, false, req.flash('loginMsg', 'The username is not existed!'))
+          }
           if (passwordHash.verify(password, user.password)) {
             //输入密码哈希化并对比
 
             return done(null, user);
+          }
+          else{
+
+            return done(null, false, req.flash('loginMsg','The password is not correct!'))
           }
         });
       });
@@ -170,12 +193,7 @@ passport.use(
 
 app.use(express.static(__dirname + "/public"));
 
-// mongodb <--> service
-// app.use(function(req, res, next) {
-//   req.mondb = mondb;
-//   next();
-// });
-// sql <--> service ?
+
 
 app.get("/", function (req, res) {
   res.render("index", {

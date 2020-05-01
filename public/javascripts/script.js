@@ -307,7 +307,7 @@ $(document).ready(function () {
       return;
     }
 
-    cost = normal * $("#price").val();
+    cost = normal * $("#price").html();
     $("#money").text(cost);
 
     //避免一种情况 用户选择座位数->用户选定位置->用户再次设定座位数 而且比原来低
@@ -636,21 +636,21 @@ $(document).ready(function () {
     if (clickedSeat == numberSeatsToReservation) {
       $("#summationList").empty();
       $("#summationList").append(
-        "Movie: <span style='color: #FFF'>" +
+        "Movie: <span style='color: #000'>" +
           m +
           ", " +
           d +
           ", " +
           h +
-          "</span><br/>User: <span style='color: #FFF'>" +
+          "</span><br/>User: <span style='color: #000'>" +
           name +
           ", " +
           email +
           ", " +
           phone +
-          "</span><br/>Number of tickets: <span style='color: #FFF'>" +
+          "</span><br/>Number of tickets: <span style='color: #000'>" +
           clickedSeat +
-          " </span>Cost: <span style='color: #FFF'>" +
+          " </span>Cost: <span style='color: #000'>" +
           cost +
           "</span>"
       );

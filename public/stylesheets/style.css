@@ -6,14 +6,17 @@ body {
   height: 100%;
   margin: 0px;
   padding: 0px;
-  background-color: #000000;
-  color: #30d5c8;
+  background-color: #00BFFF;
+  color: #000000;
+  background-image:url("../background10.jpg");
+  background-repeat:no-repeat;
+  background-size:cover;
 }
 #mainContent {
   width: 60em;
   margin: 0px auto;
   overflow: auto;
-  background-color: #111111;
+  background-color: #FDF5E6;
 }
 /* HEADER */
 header {
@@ -68,8 +71,8 @@ main #action form ul li {
   width: 15em;
 }
 main #action form input {
-  color: #30d5c8;
-  background-color: #333333;
+  color: #fff;
+  background-color: #888;
 }
 main #action form #dayList li {
   float: left;
@@ -131,7 +134,7 @@ main #ticket div:last-child {
   font-weight: bold;
 }
 main #ticket #money {
-  color: #ffffff;
+  color: #000000;
 }
 main #newsBox {
   display: flex;
