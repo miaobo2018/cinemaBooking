@@ -29,7 +29,7 @@ CREATE TABLE `advertisement` (
   `AdTitle` varchar(255) DEFAULT NULL,
   `AdContent` mediumtext NOT NULL,
   PRIMARY KEY (`adId`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -38,7 +38,7 @@ CREATE TABLE `advertisement` (
 
 LOCK TABLES `advertisement` WRITE;
 /*!40000 ALTER TABLE `advertisement` DISABLE KEYS */;
-INSERT INTO `advertisement` VALUES (2,'Spies In Disguise',' Walter is... not. But what Walter lacks in social skills he makes up for in smarts and invention, creating the awesome gadgets Lance uses on his epic missions.'),(3,'Underwater','UNDERWATER is a film that follows a crew of underwater researchers who must scramble to safety after an earthquake devastates their subterranean laboratory.'),(10,'Welcome','Welcome to Spanda Cinema!!!');
+INSERT INTO `advertisement` VALUES (2,'Spies In Disguise',' Walter is... not. But what Walter lacks in social skills he makes up for in smarts and invention, creating the awesome gadgets Lance uses on his epic missions.'),(3,'Underwater','UNDERWATER is a film that follows a crew of underwater researchers who must scramble to safety after an earthquake devastates their subterranean laboratory.'),(12,'Welcome','Welcome to Spanda Cinema!!!!');
 /*!40000 ALTER TABLE `advertisement` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -57,7 +57,7 @@ CREATE TABLE `booking` (
   `startTime` varchar(45) DEFAULT NULL,
   `seat` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`bookingId`)
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -66,7 +66,6 @@ CREATE TABLE `booking` (
 
 LOCK TABLES `booking` WRITE;
 /*!40000 ALTER TABLE `booking` DISABLE KEYS */;
-INSERT INTO `booking` VALUES (1,'liu','Harry Potter','Monday','11:30','4C'),(2,'liu','Harry Potter','Mondy','11:30','4D'),(19,'liu','Big Movie','20200418','1100','4C'),(20,'liu','Big Movie','20200418','1100','4B'),(21,'liu','Like A Boss','20200420','1100','4A'),(22,'liu','Like A Boss','20200420','1100','4B'),(23,'liu','Like A Boss','20200420','1100','4C'),(24,'liu','Like A Boss','20200420','1100','5C'),(25,'liu','Like A Boss','20200420','1100','5B'),(26,'liu','Big Movie','20200418','1100','5B'),(27,'liu','Big Movie','20200418','1100','5C'),(28,'liu','Big Movie','20200418','1100','6D'),(29,'liu','Big Movie','20200418','1100','5D'),(30,'xiaoming','Big Movie','Tuesday','1100','4A'),(31,'xiaoming','Big Movie','Tuesday','1100','5A');
 /*!40000 ALTER TABLE `booking` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -85,7 +84,7 @@ CREATE TABLE `film` (
   `price` decimal(5,2) NOT NULL,
   PRIMARY KEY (`filmId`),
   UNIQUE KEY `filmName` (`filmName`)
-) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -94,7 +93,7 @@ CREATE TABLE `film` (
 
 LOCK TABLES `film` WRITE;
 /*!40000 ALTER TABLE `film` DISABLE KEYS */;
-INSERT INTO `film` VALUES (2,'Big Movie','Comedy',120,39.99),(3,'Bad Boys For Life','Action',120,39.99),(4,'Underwater','Horror',90,29.99),(5,'Like A Boss','Comedy',90,29.99),(6,'The Way Back (2020)','Drama',120,39.99),(7,'Harley Quinn: Birds Of Prey','Action',120,39.99),(8,'The Turning','Horror',90,19.99),(9,'The Call Of The Wild','Adventure',120,29.99),(10,'Spies In Disguise','Animation',100,19.99),(50,'Harry Potter2','Thriller',90,12.00);
+INSERT INTO `film` VALUES (2,'Big Movie','Comedy',120,39.99),(3,'Bad Boys For Life','Action',120,39.99),(4,'Underwater','Horror',90,29.99),(5,'Like A Boss','Comedy',90,29.99),(6,'The Way Back (2020)','Drama',120,39.99),(7,'Harley Quinn: Birds Of Prey','Action',120,39.99),(8,'The Turning','Horror',90,19.99),(9,'The Call Of The Wild','Adventure',120,29.99),(10,'Spies In Disguise','Animation',100,19.99),(52,'Harry Potter 1','Thriller',90,123.00),(53,'Harry Potter2','Thriller',90,12.00);
 /*!40000 ALTER TABLE `film` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -170,7 +169,7 @@ CREATE TABLE `screening` (
   KEY `room` (`room`),
   CONSTRAINT `screening_ibfk_1` FOREIGN KEY (`sfilmId`) REFERENCES `film` (`filmId`),
   CONSTRAINT `screening_ibfk_2` FOREIGN KEY (`room`) REFERENCES `room` (`roomNum`)
-) ENGINE=InnoDB AUTO_INCREMENT=284 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=296 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -179,7 +178,7 @@ CREATE TABLE `screening` (
 
 LOCK TABLES `screening` WRITE;
 /*!40000 ALTER TABLE `screening` DISABLE KEYS */;
-INSERT INTO `screening` VALUES (3,'Tuesday','1100',2,'Big Movie',39.99,1),(4,'Thursday','1100',2,'Big Movie',39.99,2),(5,'Wednesday','0900',3,'Bad Boys For Life',39.99,1),(6,'Saturday','0900',3,'Bad Boys For Life',39.99,2),(7,'Saturday','1100',4,'Underwater',29.99,3),(8,'Sunday','1100',4,'Underwater',29.99,1),(9,'Sunday','1100',5,'Like A Boss',29.99,1),(10,'Thursday','1100',6,'The Way Back (2020)',39.99,3),(278,'Monday','9:00',50,'Harry Potter2',12.00,2),(279,'Monday','14:00',50,'Harry Potter2',12.00,2),(280,'Monday','19:00',50,'Harry Potter2',12.00,2),(281,'Tuesday','9:00',50,'Harry Potter2',12.00,2),(282,'Tuesday','14:00',50,'Harry Potter2',12.00,2),(283,'Tuesday','19:00',50,'Harry Potter2',12.00,2);
+INSERT INTO `screening` VALUES (3,'Tuesday','1100',2,'Big Movie',39.99,1),(4,'Thursday','1100',2,'Big Movie',39.99,2),(5,'Wednesday','0900',3,'Bad Boys For Life',39.99,1),(6,'Saturday','0900',3,'Bad Boys For Life',39.99,2),(7,'Saturday','1100',4,'Underwater',29.99,3),(8,'Sunday','1100',4,'Underwater',29.99,1),(9,'Sunday','1100',5,'Like A Boss',29.99,1),(10,'Thursday','1100',6,'The Way Back (2020)',39.99,3),(286,'Monday','9:00',52,'Harry Potter 1',123.00,3),(287,'Monday','14:00',52,'Harry Potter 1',123.00,3),(288,'Tuesday','9:00',52,'Harry Potter 1',123.00,3),(289,'Tuesday','14:00',52,'Harry Potter 1',123.00,3),(290,'Monday','8:00',53,'Harry Potter2',12.00,2),(291,'Monday','9:00',53,'Harry Potter2',12.00,2),(292,'Monday','14:00',53,'Harry Potter2',12.00,2),(293,'Tuesday','8:00',53,'Harry Potter2',12.00,2),(294,'Tuesday','9:00',53,'Harry Potter2',12.00,2),(295,'Tuesday','14:00',53,'Harry Potter2',12.00,2);
 /*!40000 ALTER TABLE `screening` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -223,14 +222,15 @@ CREATE TABLE `user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `email` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `type` int(11) DEFAULT NULL,
+  `type` varchar(20) DEFAULT NULL,
   `name` varchar(255) NOT NULL,
   `cellphone` varchar(255) DEFAULT NULL,
   `favouriteType` varchar(255) DEFAULT NULL,
+  `spending` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name_UNIQUE` (`name`),
   KEY `index2` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -239,7 +239,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'liuxiaomingskm@gmail.com','sha1$904bd35b$1$6a075d5e595004eeebce6b200b42832c89007115',1,'admin','140832692176','thriller'),(2,'miaobo@miaobo.com','sha1$904bd35b$1$6a075d5e595004eeebce6b200b42832c89007115',1,'miaobo','4088888888','History'),(3,'xiaoming@xiaoming.com','sha1$904bd35b$1$6a075d5e595004eeebce6b200b42832c89007115',1,'xiaoming','4087777777','Comedy'),(4,'junyan@junyan.com','sha1$904bd35b$1$6a075d5e595004eeebce6b200b42832c89007115',1,'junyan','4086666666','Sci-Fi'),(5,'Alice@gmail.com','sha1$904bd35b$1$6a075d5e595004eeebce6b200b42832c89007115',0,'Alice','4081234567','Adventure'),(6,'Bob@gmail.com','sha1$904bd35b$1$6a075d5e595004eeebce6b200b42832c89007115',0,'Bob','4081234567','Drama'),(7,'Carrol@gmail.com','sha1$904bd35b$1$6a075d5e595004eeebce6b200b42832c89007115',0,'Carrol','4082345671','Action'),(8,'David@gmail.com','sha1$904bd35b$1$6a075d5e595004eeebce6b200b42832c89007115',0,'David','4083456712','Animation'),(9,'Eric@gmail.com','sha1$904bd35b$1$6a075d5e595004eeebce6b200b42832c89007115',0,'Eric','4084567123','Classic'),(10,'Frank@gmail.com','sha1$904bd35b$1$6a075d5e595004eeebce6b200b42832c89007115',0,'Frank','4085671234','Crime'),(11,'Gigi@gmail.com','Gigi',0,'Gigi','4086712345','Family'),(19,'liuxiaomingskm@gmail.com','sha1$42d14bc3$1$1e44d7232e0736937522cee7e7e118a6d5566704',0,'liu','14083269217','thriller');
+INSERT INTO `user` VALUES (1,'liuxiaomingskm@gmail.com','sha1$904bd35b$1$6a075d5e595004eeebce6b200b42832c89007115','SILVER','admin','140832692176','thriller',2000),(2,'miaobo@miaobo.com','sha1$904bd35b$1$6a075d5e595004eeebce6b200b42832c89007115','SILVER','miaobo','4088888888','History',3000),(3,'xiaoming@xiaoming.com','sha1$904bd35b$1$6a075d5e595004eeebce6b200b42832c89007115','PLATINUM','xiaoming','4087777777','Comedy',30000),(4,'junyan@junyan.com','sha1$904bd35b$1$6a075d5e595004eeebce6b200b42832c89007115','SILVER','junyan','4086666666','Sci-Fi',2500),(5,'Alice@gmail.com','sha1$904bd35b$1$6a075d5e595004eeebce6b200b42832c89007115','SILVER','Alice','4081234567','Adventure',1200),(6,'Bob@gmail.com','sha1$904bd35b$1$6a075d5e595004eeebce6b200b42832c89007115','SILVER','Bob','4081234567','Drama',800),(7,'Carrol@gmail.com','sha1$904bd35b$1$6a075d5e595004eeebce6b200b42832c89007115','SILVER','Carrol','4082345671','Action',2300),(8,'David@gmail.com','sha1$904bd35b$1$6a075d5e595004eeebce6b200b42832c89007115','GOLD','David','4083456712','Animation',3400),(9,'Eric@gmail.com','sha1$904bd35b$1$6a075d5e595004eeebce6b200b42832c89007115','GOLD','Eric','4084567123','Classic',4200),(29,'liuxiaomingskm@gmail.com','sha1$694ba055$1$a1919678f6d32d21cca0f35bee35b2ac695965e8','SILVER','liu','14083269217','thriller',2000),(30,'liuxiaomingskm@gmail.com','sha1$ea434b1c$1$96721c40897711984f9d3f2af723a101b1c9cf54','SILVER','liu1','14083269217','thriller',1222),(31,'liuxiaomingskm@gmail.com','sha1$49bc64f9$1$a2a5642f3c2648c1f646f8f6a9cf913e5e335eef','SILVER','liu3','14083269217','baobaobabaaini',2323);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -252,4 +252,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-04-28 16:47:19
+-- Dump completed on 2020-05-01 12:47:28

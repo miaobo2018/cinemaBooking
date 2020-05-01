@@ -20,8 +20,8 @@ $(document).ready(function () {
       success: function (data) {
         //有三个广告位置
         for (var i = 1; i <= 3; i++) {
-          $(".news" + i + " .title").text(data.news[i - 1].AdTitle);
-          $(".news" + i + " .content").text(data.news[i - 1].AdContent);
+          $(".news" + i + " .title").text(data.news[0][i - 1].AdTitle);
+          $(".news" + i + " .content").text(data.news[0][i - 1].AdContent);
         }
       },
     });

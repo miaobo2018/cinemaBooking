@@ -51,8 +51,7 @@ const users = require("./controllers/userController.js");
 const movies = require("./controllers/movieController.js");
 const reservations = require("./controllers/reservationController.js");
 const newses = require("./controllers/newsController.js");
-const signupController = require("./controllers/signupController");
-const loginController = require("./controllers/loginController");
+
 const ratings = require("./controllers/ratingController");
 
 app.set("view engine", "ejs"); // ejs engine
@@ -112,6 +111,7 @@ passport.use(
       var name = req.body.username;
       var cellphone = req.body.cellphone;
       var favouriteType = req.body.favouriteType;
+      var spending = req.body.spending;
 
       pool.getConnection(function (err, connection) {
         if (err) throw err;
@@ -124,7 +124,7 @@ passport.use(
             return done(null, false, req.flash('signupMsg', 'The username is already existed!'))
           }
         })
-        var sql2= `INSERT INTO ${table} (email, password, type, name, cellphone, favouriteType) VALUES ('${email}', '${password}', '${type}', '${name}', '${cellphone}', '${favouriteType}')`;
+        var sql2= `INSERT INTO ${table} (email, password, type, name, cellphone, favouriteType, spending) VALUES ('${email}', '${password}', '${type}', '${name}', '${cellphone}', '${favouriteType}','${spending}')`;
         connection.query(sql2, function (err, user) {
           logger.info("SQL Query: ", sql2);
           logger.info("SQL Result: ", user);
@@ -134,11 +134,16 @@ passport.use(
             console.log("Register new user successfully!");
           }
         });
+
+        connection.query(`CALL SetCustomerLevel('${name}')`, function (err) {
+              console.log("CALL 成功！！");
+        });
         sql2 = `SELECT * FROM ${table} WHERE name = '${name}'`;
         connection.query(sql2, function (err, users) {
           logger.info("SQL Query: ", sql2);
           logger.info("SQL Result: ", users);
           var user = users[0];
+
           return done(null, user);
         });
       });

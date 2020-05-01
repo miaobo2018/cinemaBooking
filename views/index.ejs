@@ -15,10 +15,10 @@
   <%- include("defaultparts/header.ejs") %>
   <main>
     <% if (user != 'none') { %>
-          <div id="hello"><strong>Hello <span id="nameofuser" style="color: #000"><%= user.name %>, welcome to SJSU Cinema!</span></strong></div>
+          <div id="hello"><h2>Hello <span id="nameofuser" style="color: #000"><%= user.name %>, welcome to SJSU Cinema!</span></h2></div>
     <% } else { %>
       <% if (action == 'none') { %>
-                <div id="hello"><strong>Please login first to book seats</strong></div>
+                <div id="hello"><h2>Please login first to book seats</h2></div>
       <% } %>
     <% } %>
 

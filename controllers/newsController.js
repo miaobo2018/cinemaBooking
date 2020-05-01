@@ -15,18 +15,19 @@ var pool = mysql.createPool({
 var log4js = require("log4js");
 const logger = log4js.getLogger();
 
+
 exports.shownewsCRUD = function () {
   return function (req, res) {
     pool.getConnection(function (err, connection) {
       if (err) throw err;
 
-      var table = "advertisement"; // table name
-      var sql = `SELECT * FROM ${table} `;
+      // var table = "advertisement"; // table name
+      var sql = `CALL myProcedure()`;
 
-      connection.query(sql, function (err, news, fields) {
-        logger.info("SQL Query: ", sql);
-        logger.info("SQL Result: ", news);
-        // console.log("news", news);
+      connection.query(sql, function (err, news) {
+        // logger.info("SQL Query: ", sql);
+        // logger.info("SQL Result: ", news);
+        console.log("news", news);
         connection.release();
         res.json({
           news: news,
