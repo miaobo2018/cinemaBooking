@@ -244,6 +244,14 @@ INSERT INTO `user` VALUES (1,'liuxiaomingskm@gmail.com','sha1$904bd35b$1$6a075d5
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
+-- create view
+DROP VIEW IF EXISTS `film_seat`;
+CREATE VIEW film_seat
+AS SELECT f.filmName, se.sroomNum, se.rowNum, se.colNum 
+from seat se, screening sc, film f
+where f.filmId = sc.sfilmId and sc.room = se.sroomNum;
+-- create view end
+
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
