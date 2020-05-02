@@ -1,5 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `cinema_booking` /*!40100 DEFAULT CHARACTER SET latin1 */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `cinema_booking`;
 -- MySQL dump 10.13  Distrib 8.0.12, for macos10.13 (x86_64)
 --
 -- Host: 127.0.0.1    Database: cinema_booking
@@ -242,6 +240,69 @@ LOCK TABLES `user` WRITE;
 INSERT INTO `user` VALUES (1,'liuxiaomingskm@gmail.com','sha1$904bd35b$1$6a075d5e595004eeebce6b200b42832c89007115','SILVER','admin','140832692176','thriller',2000),(2,'miaobo@miaobo.com','sha1$904bd35b$1$6a075d5e595004eeebce6b200b42832c89007115','SILVER','miaobo','4088888888','History',3000),(3,'xiaoming@xiaoming.com','sha1$904bd35b$1$6a075d5e595004eeebce6b200b42832c89007115','PLATINUM','xiaoming','4087777777','Comedy',30000),(4,'junyan@junyan.com','sha1$904bd35b$1$6a075d5e595004eeebce6b200b42832c89007115','SILVER','junyan','4086666666','Sci-Fi',2500),(5,'Alice@gmail.com','sha1$904bd35b$1$6a075d5e595004eeebce6b200b42832c89007115','SILVER','Alice','4081234567','Adventure',1200),(6,'Bob@gmail.com','sha1$904bd35b$1$6a075d5e595004eeebce6b200b42832c89007115','SILVER','Bob','4081234567','Drama',800),(7,'Carrol@gmail.com','sha1$904bd35b$1$6a075d5e595004eeebce6b200b42832c89007115','SILVER','Carrol','4082345671','Action',2300),(8,'David@gmail.com','sha1$904bd35b$1$6a075d5e595004eeebce6b200b42832c89007115','GOLD','David','4083456712','Animation',3400),(9,'Eric@gmail.com','sha1$904bd35b$1$6a075d5e595004eeebce6b200b42832c89007115','GOLD','Eric','4084567123','Classic',4200),(29,'liuxiaomingskm@gmail.com','sha1$694ba055$1$a1919678f6d32d21cca0f35bee35b2ac695965e8','SILVER','liu','14083269217','thriller',2000),(30,'liuxiaomingskm@gmail.com','sha1$ea434b1c$1$96721c40897711984f9d3f2af723a101b1c9cf54','SILVER','liu1','14083269217','thriller',1222),(31,'liuxiaomingskm@gmail.com','sha1$49bc64f9$1$a2a5642f3c2648c1f646f8f6a9cf913e5e335eef','SILVER','liu3','14083269217','baobaobabaaini',2323);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Dumping events for database 'cinema_booking'
+--
+
+--
+-- Dumping routines for database 'cinema_booking'
+--
+/*!50003 DROP PROCEDURE IF EXISTS `myProcedure` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `myProcedure`()
+BEGIN
+    SELECT * from advertisement;
+  END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `SetCustomerLevel` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SetCustomerLevel`(
+    IN  CustomerName varchar(255))
+BEGIN
+    DECLARE credit INT DEFAULT 0;
+
+    SELECT spending
+    INTO credit
+    FROM user
+    WHERE  name = CustomerName;
+
+    IF credit >=5000 THEN
+        update user
+        set type = 'PLATINUM' where name = CustomerName;
+	ELSEIF credit <5000 AND credit > 3000 THEN
+      update user
+        set type = 'GOLD' where name = CustomerName;
+    ELSE
+        update user
+        set type = 'SILVER' where name = CustomerName;
+    END IF;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -252,4 +313,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-05-01 12:47:28
+-- Dump completed on 2020-05-02 13:00:41
