@@ -5,6 +5,7 @@ var ratingSchema = mongoose.Schema({
   userName: String,
   filmName: String,
   score: String,
+  comment: String
 });
 var ratingModel = mongoose.model("ratingModel", ratingSchema);
 

@@ -136,7 +136,7 @@ passport.use(
         });
 
         connection.query(`CALL SetCustomerLevel('${name}')`, function (err) {
-              console.log("CALL 成功！！");
+              console.log("CALL Successfully!");
         });
         sql2 = `SELECT * FROM ${table} WHERE name = '${name}'`;
         connection.query(sql2, function (err, users) {
