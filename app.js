@@ -1,4 +1,5 @@
 
+// SJSU CMPE 226 Spring 2020 Team4
 const bodyParser = require("body-parser");
 const express = require("express");
 const app = express();
@@ -77,7 +78,9 @@ app.use(function(req,res,next){
 // 采用本地passport策略， 并在session层持久化
 var LocalStrategy = require("passport-local").Strategy;
 passport.serializeUser(function (user, done) {
-  done(null, user.name);
+  // console.log('我现在要序列化了！');
+  // console.log('序列化里的user', user);
+  return done(null, user.name);
 });
 passport.deserializeUser(function (name, done) {
   pool.getConnection(function (err, connection) {
@@ -89,7 +92,7 @@ passport.deserializeUser(function (name, done) {
       connection.release();
       if (err) throw err;
       var user = users[0];
-      done(err, user);
+      return done(err, user);
     });
   });
 });
@@ -119,9 +122,11 @@ passport.use(
         var table = "user";
         var sql1 = `SELECT name  FROM ${table} WHERE name = '${name}'`;
         connection.query(sql1,function(err, user){
-          if (user){
+          console.log("signup查询user是否存在",user);
+          //这里不能写成if(user)的形式 JS中 空数组也是true ！！！
+          if (user.length !== 0){
 
-            return done(null, false, req.flash('signupMsg', 'The username is already existed!'))
+            return done(null, false, req.flash('signupMsg', 'The username is already existed!'));
           }
         })
         var sql2= `INSERT INTO ${table} (email, password, type, name, cellphone, favouriteType, spending) VALUES ('${email}', '${password}', '${type}', '${name}', '${cellphone}', '${favouriteType}','${spending}')`;
@@ -129,7 +134,7 @@ passport.use(
           logger.info("SQL Query: ", sql2);
           logger.info("SQL Result: ", user);
           if (err) {
-            throw err;
+            // throw err;
           } else {
             console.log("Register new user successfully!");
           }
@@ -138,12 +143,12 @@ passport.use(
         connection.query(`CALL SetCustomerLevel('${name}')`, function (err) {
               console.log("CALL Successfully!");
         });
-        sql2 = `SELECT * FROM ${table} WHERE name = '${name}'`;
+        sql2 = `SELECT name, password FROM ${table} WHERE name = '${name}'`;
         connection.query(sql2, function (err, users) {
           logger.info("SQL Query: ", sql2);
           logger.info("SQL Result: ", users);
           var user = users[0];
-
+          // console.log("signup's user", user);
           return done(null, user);
         });
       });
@@ -183,7 +188,7 @@ passport.use(
           }
           if (passwordHash.verify(password, user.password)) {
             //输入密码哈希化并对比
-
+            // console.log("login的user", user);
             return done(null, user);
           }
           else{

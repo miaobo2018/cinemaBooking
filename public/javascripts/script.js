@@ -1,5 +1,5 @@
 "use strict";
-
+// SJSU CMPE 226 Spring 2020 Team4
 $(document).ready(function () {
   /* 隐藏部分component logout和座位布置，tickets等 */
   $(".wylogin").hide();

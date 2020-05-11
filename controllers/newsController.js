@@ -1,3 +1,4 @@
+// SJSU CMPE 226 Spring 2020 Team4
 /*jshint browser: true, globalstrict: true, devel: true */
 /*globals io: false */
 "use strict";
@@ -27,7 +28,7 @@ exports.shownewsCRUD = function () {
       connection.query(sql, function (err, news) {
         // logger.info("SQL Query: ", sql);
         // logger.info("SQL Result: ", news);
-        console.log("news", news);
+        // console.log("news", news);
         connection.release();
         res.json({
           news: news,

@@ -1,4 +1,5 @@
-"use strict";
+
+// SJSU CMPE 226 Spring 2020 Team4"use strict";
 var mysql = require("mysql");
 var pool = mysql.createPool({
   host: "localhost",

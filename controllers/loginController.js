@@ -1,3 +1,4 @@
+// SJSU CMPE 226 Spring 2020 Team4
 var mysql = require("mysql");
 var mysqldb = mysql.createConnection({
   host: "localhost",

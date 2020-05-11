@@ -1,3 +1,4 @@
+// SJSU CMPE 226 Spring 2020 Team4
 /*jshint browser: true, globalstrict: true, devel: true */
 /*globals io: false */
 "use strict";
